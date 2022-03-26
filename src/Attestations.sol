@@ -62,11 +62,13 @@ contract Attendance is AttestationList {
     string date;
   }
   event_details private _attestation;
-  constructor (event_details memory attestation_) {
-    _attestation=attestation_;
+  constructor (string memory name,string memory place,string memory date) {
+    _attestation.name=name;
+    _attestation.place=place;
+    _attestation.date=date;
   }
 
   function attestation () public view returns (string memory) {
-    return  string(string.concat("name: ", bytes(_attestation.name), "\n", "place: ", bytes(_attestation.place),"\n", "date:", bytes(_attestation.date)));
+    return  string(string.concat("name: ", bytes(_attestation.name), "\n", "place: ", bytes(_attestation.place),"\n", "date: ", bytes(_attestation.date)));
   }
 }

@@ -11,7 +11,13 @@ interface CheatCodes {
     function stopPrank() external;
 }
 
-contract FreeFormAttestationTest is DSTest {
+contract ExtendedDSTest is DSTest {
+  function stringEq(string memory a, string memory b) public pure returns (bool) {
+    return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
+  }
+}
+
+contract FreeFormAttestationTest is ExtendedDSTest {
   FreeForm freeform;
   CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
   function setUp() public {
@@ -19,7 +25,7 @@ contract FreeFormAttestationTest is DSTest {
   }
 
   function testAttestationString() public {
-    assertTrue(compareStrings("freeformtest",freeform.attestation()));
+    assertTrue(stringEq("freeformtest",freeform.attestation()));
   }
 
   function testEverythingEmpty() public {
@@ -55,8 +61,15 @@ contract FreeFormAttestationTest is DSTest {
     assertEq(freeform.attestees().length,4);
     assertEq(freeform.attestations_about(address(3)).length,2);
   }
-  //This needs to go in ds-test
-  function compareStrings(string memory a, string memory b) public pure returns (bool) {
-    return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
+}
+
+contract AttendanceAttestationTest is ExtendedDSTest {
+  Attendance attendance;
+  CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
+  function setUp() public {
+    attendance = new Attendance("test event","test place", "test date");
+  }
+  function testAttestationString() public {
+    assertTrue(stringEq(attendance.attestation(), "name: test event\nplace: test place\ndate: test date"));
   }
 }
