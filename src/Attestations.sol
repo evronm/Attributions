@@ -2,11 +2,29 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
+contract Registry {
+  string[] public attestation_strings;
+  mapping (string => address) public contracts;
+  string private _name;
+  Registry private registry;
+  constructor(string memory name_, address registry_addr) {
+    _name=name_;
+    if (registry_addr > address(0)) { registry=Registry(registry_addr);}
+  }
+  
+}
+
 abstract contract AttestationList {
+  Registry private registry;
+
   mapping (address => address[]) public _attestations_by;
   mapping (address => address[]) public _attestations_about;
   address[] public _attestors;
   address[] public _attestees;
+
+  constructor(address registry_addr) {
+    if (registry_addr > address(0)) { registry=Registry(registry_addr);}
+  }
 
   function attestations_by (address attestor) public view returns (address[] memory){
     return _attestations_by[attestor];
@@ -47,7 +65,7 @@ abstract contract AttestationList {
 }
 contract FreeForm is AttestationList { 
   string private _attestation;
-  constructor(string memory attestation_) {
+  constructor(string memory attestation_, address registry_addr) AttestationList(registry_addr){
     _attestation=attestation_;
   }
   function attestation () public view returns (string memory) {
@@ -62,7 +80,7 @@ contract Attendance is AttestationList {
     string date;
   }
   event_details private _attestation;
-  constructor (string memory name,string memory place,string memory date) {
+  constructor (string memory name,string memory place,string memory date, address registry_addr) AttestationList(registry_addr){
     _attestation.name=name;
     _attestation.place=place;
     _attestation.date=date;
