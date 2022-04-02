@@ -17,6 +17,7 @@ contract ExtendedDSTest is DSTest {
   }
 }
 
+// Using FrreForm to test abstract base class funtionality
 contract FreeFormAttestationTest is ExtendedDSTest {
   FreeForm freeform;
   CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
