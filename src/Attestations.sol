@@ -2,20 +2,10 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-contract Registry {
-  string[] public attestation_strings;
-  mapping (string => address) public contracts;
-  string private _name;
-  Registry private registry;
-  constructor(string memory name_, address registry_addr) {
-    _name=name_;
-    if (registry_addr > address(0)) { registry=Registry(registry_addr);}
-  }
-  
-}
+import "./Registry.sol" ;
 
 abstract contract AttestationList {
-  Registry private registry;
+  Registry public registry;
 
   mapping (address => address[]) public _attestations_by;
   mapping (address => address[]) public _attestations_about;
@@ -23,22 +13,15 @@ abstract contract AttestationList {
   address[] public _attestees;
 
   constructor(address registry_addr) {
-    if (registry_addr > address(0)) { registry=Registry(registry_addr);}
+    if (registry_addr > address(0)) {
+      registry=Registry(registry_addr);
+    }
   }
 
-  function attestations_by (address attestor) public view returns (address[] memory){
-    return _attestations_by[attestor];
-  }
-
-  function attestations_about (address attestee) public view returns (address[] memory){
-    return _attestations_about[attestee];
-  }
-  function attestors () public view returns (address[] memory){
-    return _attestors;
-  }
-  function attestees () public view returns (address[] memory){
-    return _attestees;
-  }
+  function attestations_by (address attestor) public view returns (address[] memory){ return _attestations_by[attestor]; }
+  function attestations_about (address attestee) public view returns (address[] memory){ return _attestations_about[attestee]; }
+  function attestors () public view returns (address[] memory){ return _attestors; }
+  function attestees () public view returns (address[] memory){ return _attestees; }
 
   function attest(address about_addr) public {
     require (find_redundant(about_addr) == false, "Attestation already exists.");
