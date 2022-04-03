@@ -15,7 +15,8 @@ contract Registry {
     name=name_;
     if (registry_addr > address(0)) {
       registry=Registry(registry_addr);
-      registry.register_registry(this);
+//      this doesn't work because we're in a constructor and can't access any of our functions.  Registration has to happen from the outside.  Hope there's a better workaround...
+//      registry.register_registry(this);
     }
   }
 
@@ -23,8 +24,10 @@ contract Registry {
   function attestation_strings () public view returns (string[] memory){ return _attestation_strings; }
   function registries (string memory registry_name) public view returns (address){ return _registries[registry_name]; }
   function registry_names () public view returns (string[] memory){ return _registry_names; }
+
   
   function register_registry(Registry child) public {
+    
     require (registries(child.name())==address(0), "This registry is already registered");
     _registry_names.push(child.name());
     _registries[child.name()]=address(child);
