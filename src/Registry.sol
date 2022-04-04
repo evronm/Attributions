@@ -3,33 +3,36 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 contract Registry {
-  string[] public _registry_names;
-  mapping (string => address) public _registries;
+  string[] public _children_names;
+  mapping (string => address) public _children;
   string[] public _attestation_strings;
   mapping (string => address) public _contracts;
 
   string public name;
-  Registry public registry;
+  Registry public parent;
 
-  constructor(string memory name_, address registry_addr) {
+  constructor(string memory name_, address parent_addr) {
     name=name_;
-    if (registry_addr > address(0)) {
-      registry=Registry(registry_addr);
-//      this doesn't work because we're in a constructor and can't access any of our functions.  Registration has to happen from the outside.  Hope there's a better workaround...
-//      registry.register_registry(this);
+    if (parent_addr > address(0)) {
+      parent=Registry(parent_addr);
     }
   }
 
   function contracts (string memory attestation_string) public view returns (address){ return _contracts[attestation_string]; }
   function attestation_strings () public view returns (string[] memory){ return _attestation_strings; }
-  function registries (string memory registry_name) public view returns (address){ return _registries[registry_name]; }
-  function registry_names () public view returns (string[] memory){ return _registry_names; }
+  function children (string memory child_name) public view returns (address){ return _children[child_name]; }
+  function children_names () public view returns (string[] memory){ return _children_names; }
 
+  // Note we return 'this' here.  It's my (godawful) workaround for constructor limitations.
+  function register_in_parent() public returns (Registry) {
+    this.parent().register_registry(this);
+    return this;
+  }
   
   function register_registry(Registry child) public {
-    require (registries(child.name())==address(0), "This registry is already registered");
-    _registry_names.push(child.name());
-    _registries[child.name()]=address(child);
+    require (children(child.name())==address(0), "This registry is already registered");
+    _children_names.push(child.name());
+    _children[child.name()]=address(child);
   
   }
   function register_attestation() public {
