@@ -13,7 +13,21 @@ contract RegistryTest is ExtendedDSTest {
     registry = new Registry("test", address(0));
   }
   function testRegisterRegistry() public{
+    Registry r = new Registry("test1", address(registry));
+    r.registry().register_registry(r);
+  }
+  function testFailDuplicateName() public {
+    Registry r = new Registry("test1", address(registry));
+    r.registry().register_registry(r);
+    r.registry().register_registry(r);
+  }
+  function testTree() public{
+    Registry r = new Registry("test1", address(registry));
     Registry r1 = new Registry("test1", address(registry));
-    r1.registry().register_registry(r1);
+    Registry r2 = new Registry("test1", address(registry));
+    Registry r11 = new Registry("test1", address(r1));
+    Registry r12 = new Registry("test1", address(r1));
+    Registry r21 = new Registry("test1", address(r2));
+    Registry r22 = new Registry("test1", address(r2));
   }
 }

@@ -27,7 +27,6 @@ contract Registry {
 
   
   function register_registry(Registry child) public {
-    
     require (registries(child.name())==address(0), "This registry is already registered");
     _registry_names.push(child.name());
     _registries[child.name()]=address(child);
