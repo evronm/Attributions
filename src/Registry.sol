@@ -9,13 +9,9 @@ contract Registry {
   mapping (string => address) public _contracts;
 
   string public name;
-  Registry public parent;
 
-  constructor(string memory name_, address parent_addr) {
+  constructor(string memory name_) {
     name=name_;
-    if (parent_addr > address(0)) {
-      parent=Registry(parent_addr);
-    }
   }
 
   function contracts (string memory attestation_string) public view returns (address){ return _contracts[attestation_string]; }
@@ -23,12 +19,6 @@ contract Registry {
   function children (string memory child_name) public view returns (address){ return _children[child_name]; }
   function children_names () public view returns (string[] memory){ return _children_names; }
 
-  // Note we return 'this' here.  It's my (godawful) workaround for constructor limitations.
-  function register_in_parent() public returns (Registry) {
-    this.parent().register_registry(this);
-    return this;
-  }
-  
   function register_registry(Registry child) public {
     require (children(child.name())==address(0), "This registry is already registered");
     _children_names.push(child.name());

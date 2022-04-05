@@ -9,19 +9,21 @@ contract RegistryTest is ExtendedDSTest {
   FreeForm freeform;
   CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
   function setUp() public {
-    freeform = new FreeForm("freeformtest", address(0));
-    registry = new Registry("test", address(0));
+    freeform = new FreeForm("freeformtest");
+    registry = new Registry("test");
   }
   function testRegisterRegistry() public{
-    Registry r = new Registry("test1", address(registry)).register_in_parent();
-    assertEq(r.parent().children_names().length,1);
+    Registry r = new Registry("test1");
+    registry.register_registry(r);
+    assertEq(registry.children_names().length,1);
   }
   function testFailDuplicateName() public {
-    Registry r = new Registry("test1", address(registry)).register_in_parent();
-    r.parent().register_registry(r);
+    Registry r = new Registry("test1");
+    registry.register_registry(r);
+    registry.register_registry(r);
   }
   function testTree() public{
-    Registry r1 = new Registry("test2", address(registry)).register_in_parent();
+/*    Registry r1 = new Registry("test2", address(registry)).register_in_parent();
     Registry r2 = new Registry("test3", address(registry)).register_in_parent();
     Registry r11 = new Registry("test11", address(r1)).register_in_parent();
     Registry r12 = new Registry("test12", address(r1)).register_in_parent();
@@ -32,5 +34,6 @@ contract RegistryTest is ExtendedDSTest {
     assertEq(registry.children_names().length,2);
     assertEq(r1.children_names().length,2);
     assertEq(r2.children_names().length,3);
+   */
   }
 }
