@@ -42,5 +42,10 @@ contract RegistryTest is ExtendedDSTest {
     assertEq(registry.children_names().length,2);
     assertEq(r1.children_names().length,2);
     assertEq(r2.children_names().length,3);
+
+    assertTrue(stringEq(registry.children_names()[0],r1.name()));
+    assertTrue(stringEq(registry.children_names()[1],r2.name()));
+    assertTrue(stringEq(r1.children_names()[0],r11.name()));
+    assertTrue(stringEq(r2.children_names()[2],r23.name()));
   }
 }
