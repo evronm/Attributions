@@ -48,4 +48,15 @@ contract RegistryTest is ExtendedDSTest {
     assertTrue(stringEq(r1.children_names()[0],r11.name()));
     assertTrue(stringEq(r2.children_names()[2],r23.name()));
   }
+
+  function testAttestationRegistry() public {
+    registry.register_attestation(freeform.attestation(),address(freeform));
+    assertEq(registry.attestation_strings().length, 1);
+    assertEq(registry.attestations(freeform.attestation()),address(freeform));
+  }
+
+  function testFailDupAttestation() public {
+    registry.register_attestation(freeform.attestation(),address(freeform));
+    registry.register_attestation(freeform.attestation(),address(freeform));
+  }
 }

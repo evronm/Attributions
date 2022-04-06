@@ -6,7 +6,7 @@ contract Registry {
   string[] public _children_names;
   mapping (string => address) public _children;
   string[] public _attestation_strings;
-  mapping (string => address) public _contracts;
+  mapping (string => address) public _attestations;
 
   string public name;
 
@@ -14,7 +14,7 @@ contract Registry {
     name=name_;
   }
 
-  function contracts (string memory attestation_string) public view returns (address){ return _contracts[attestation_string]; }
+  function attestations (string memory attestation_string) public view returns (address){ return _attestations[attestation_string]; }
   function attestation_strings () public view returns (string[] memory){ return _attestation_strings; }
   function children (string memory child_name) public view returns (address){ return _children[child_name]; }
   function children_names () public view returns (string[] memory){ return _children_names; }
@@ -28,7 +28,11 @@ contract Registry {
     _children[child.name()]=address(child);
   
   }
-  function register_attestation() public {
+  //using attestation string as unique here; eliminates the need for a registration function for each attestation class.
+  function register_attestation(string memory attestation, address child) public {
+    require (attestations(attestation)==address(0), "This attestation is already registered");
+    _attestation_strings.push(attestation);
+    _attestations[attestation]=child;
   
   }
 }
