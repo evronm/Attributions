@@ -22,6 +22,8 @@ contract Registry {
   function register_in_parent(Registry parent) public {
     parent.register_registry(this);
   }
+
+
   function register_registry(Registry child) public {
     require (children(child.name())==address(0), "This registry is already registered");
     _children_names.push(child.name());
