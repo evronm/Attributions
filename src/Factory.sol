@@ -3,6 +3,7 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 import 'Registry.sol';
+import "@openzeppelin/contracts/proxy/Clones.sol";
 
 contract Factory {
   function create_registry(string memory child_name, address parent) public returns (Registry) {

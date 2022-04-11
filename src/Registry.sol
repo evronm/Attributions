@@ -2,7 +2,9 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-contract Registry {
+import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
+
+contract Registry is Initializable {
   string[] public _children_names;
   mapping (string => address) public _children;
   string[] public _attestation_strings;
@@ -10,8 +12,9 @@ contract Registry {
 
   string public name;
 
-  constructor(string memory name_) {
+  function init (string memory name_) public initializer returns (Registry) {
     name=name_;
+    return this;
   }
 
   function attestations (string memory attestation_string) public view returns (address){ return _attestations[attestation_string]; }
