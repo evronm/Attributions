@@ -3,6 +3,7 @@
 pragma solidity 0.8.10;
 
 import "./Attestations.t.sol";
+import "../Registry.sol";
 
 contract RegistryTest is ExtendedDSTest {
   Registry registry;
