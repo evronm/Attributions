@@ -10,7 +10,7 @@ contract RegistryTest is ExtendedDSTest {
   FreeForm freeform;
   CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
   function setUp() public {
-    freeform = new FreeForm("freeformtest");
+    freeform = new FreeForm().init("freeformtest");
     registry = new Registry().init("test");
   }
   function testRegisterRegistry() public{

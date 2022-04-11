@@ -22,7 +22,7 @@ contract FreeFormAttestationTest is ExtendedDSTest {
   FreeForm freeform;
   CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
   function setUp() public {
-    freeform = new FreeForm("freeformtest");
+    freeform = new FreeForm().init("freeformtest");
   }
 
   function testAttestationString() public {
@@ -68,7 +68,7 @@ contract AttendanceAttestationTest is ExtendedDSTest {
   Attendance attendance;
   CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
   function setUp() public {
-    attendance = new Attendance("test event","test place", "test date");
+    attendance = new Attendance().init("test event","test place", "test date");
   }
   function testAttestationString() public {
     assertTrue(stringEq(attendance.attestation(), "name: test event\nplace: test place\ndate: test date"));

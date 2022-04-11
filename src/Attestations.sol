@@ -39,27 +39,29 @@ abstract contract AttestationList {
   }
 
 }
-contract FreeForm is AttestationList { 
+contract FreeForm is AttestationList, Initializable { 
   string private _attestation;
-  constructor(string memory attestation_) {
+  function init (string memory attestation_) public initializer returns (FreeForm) {
     _attestation=attestation_;
+    return this;
   }
   function attestation () public view returns (string memory) {
     return  _attestation;
   }
 }
 
-contract Attendance is AttestationList {
+contract Attendance is AttestationList, Initializable {
   struct event_details {
     string name;
     string place;
     string date;
   }
   event_details private _attestation;
-  constructor (string memory name,string memory place,string memory date) {
+  function init (string memory name,string memory place,string memory date) public initializer returns (Attendance) {
     _attestation.name=name;
     _attestation.place=place;
     _attestation.date=date;
+    return this;
   }
 
   function attestation () public view returns (string memory) {
