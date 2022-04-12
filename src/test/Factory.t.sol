@@ -1,8 +1,7 @@
-
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity >=0.7.0 <0.9.0;
 
-import "./Attestations.t.sol";
+import "./extend_ds_test.sol";
 import "../Factory.sol";
 
 contract FactoryTest is ExtendedDSTest {
