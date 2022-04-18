@@ -24,4 +24,12 @@ contract Factory is Initializable {
     }
     return child;
   }
+
+  function create_free_form(string memory attestation, address registry) public returns (FreeForm) {
+    FreeForm ff=FreeForm(Clones.clone(base_free_form)).init(attestation);
+    if (registry > address(0)) {
+      Registry(registry).register_attestation(attestation,address(ff));
+    }
+    return ff;
+  }
 }
