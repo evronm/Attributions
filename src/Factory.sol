@@ -32,4 +32,12 @@ contract Factory is Initializable {
     }
     return ff;
   }
+
+  function create_attendance(string memory name, string memory location, string memory date, address registry) public returns (Attendance) {
+    Attendance att=Attendance(Clones.clone(base_attendance)).init(name, location, date);
+    if (registry > address(0)) {
+      Registry(registry).register_attestation(att.attestation(),address(att));
+    }
+    return att;
+  }
 }

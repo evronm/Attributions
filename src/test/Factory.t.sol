@@ -33,4 +33,13 @@ contract FactoryTest is ExtendedDSTest {
     assertEq(1, r1.attestation_strings().length);
     assertEq(address(ff2),r1.attestations("test"));
   }
+  function testAttendanceFactory() public {
+    Registry r1=factory.create_registry("r1",address(0));
+    Attendance att=factory.create_attendance("name","place","date",address(0));
+    assertTrue(stringEq(att.attestation(), "name: name\nplace: place\ndate: date"));
+
+    Attendance att2=factory.create_attendance("name","place","date",address(r1));
+    assertEq(1, r1.attestation_strings().length);
+    assertEq(address(att2),r1.attestations("name: name\nplace: place\ndate: date"));
+  }
 }
