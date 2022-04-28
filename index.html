@@ -1,1 +1,31 @@
-/etc/sv/thttpd/index.html
+<html>
+  <head>
+  </head>
+  <script src="https://cdn.ethers.io/lib/ethers-5.6.umd.min.js" type="text/javascript"> </script>
+  <script src="zepto.min.js" type="text/javascript"> </script>
+  <script type="text/javascript">
+    const factory_addr="0x789abfd5a804abc0b619465afc4c33e558fa67b9";
+    const factory_abi=[ { "inputs": [ { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "string", "name": "location", "type": "string" }, { "internalType": "string", "name": "date", "type": "string" }, { "internalType": "address", "name": "registry", "type": "address" } ], "name": "create_attendance", "outputs": [ { "internalType": "contract Attendance", "name": "", "type": "address" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "string", "name": "attestation", "type": "string" }, { "internalType": "address", "name": "registry", "type": "address" } ], "name": "create_free_form", "outputs": [ { "internalType": "contract FreeForm", "name": "", "type": "address" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "string", "name": "child_name", "type": "string" }, { "internalType": "address", "name": "parent", "type": "address" } ], "name": "create_registry", "outputs": [ { "internalType": "contract Registry", "name": "", "type": "address" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "init", "outputs": [ { "internalType": "contract Factory", "name": "", "type": "address" } ], "stateMutability": "nonpayable", "type": "function" } ];
+    function mm_connect() {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      const factory_ro=new ethers.Contract(factory_addr, factory_abi, provider);
+      const factory_rw=new ethers.Contract(factory_addr, factory_abi, signer);
+      $('#mm_connect').hide();
+    }
+    function new_registry(){
+
+    }
+    function show_registries(){
+
+    }
+  </script>
+  <body>
+    <h1>Attestation Management</h1>
+    <button id="mm_connect" onclick="mm_connect()">Connect to wallet</button>
+    <h2>Registries</h2>
+    <button id="new_registry" onclick="new_registry()">New Registry</button>
+    <ul id="registries"></ul>"
+  </body>
+</html>
