@@ -23,6 +23,8 @@ contract FactoryTest is ExtendedDSTest {
     assertEq(address(r11), r1.children("r11"));
     assertEq(address(r12), r1.children(r12.name()));
     assertEq(address(r13), r1.children(r13.name()));
+    assertEq(1,factory.registries().length);
+    assertEq(address(r1), factory.registries()[0]);
   }
   function testFreeFormFactory() public {
     Registry r1=factory.create_registry("r1",address(0));

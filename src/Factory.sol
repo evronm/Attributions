@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
 
 contract Factory is Initializable {
+  address[] private _registries; //I'm doing it this way to save gas fees
   address private base_registry;
   address private base_free_form;
   address private base_attendance;
@@ -20,7 +21,8 @@ contract Factory is Initializable {
     Registry child=Registry(Clones.clone(base_registry)).init(child_name);
     if (parent > address(0)) {
       Registry(parent).register_registry(child);
-    
+    } else {
+      _registries.push(address(child));
     }
     return child;
   }
@@ -39,5 +41,8 @@ contract Factory is Initializable {
       Registry(registry).register_attestation(att.attestation(),address(att));
     }
     return att;
+  }
+  function registries() public view returns (address[] memory){
+    return _registries;
   }
 }
