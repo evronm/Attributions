@@ -15,11 +15,11 @@
       signer = provider.getSigner();
       factory_ro=new ethers.Contract(factory_addr, factory_abi, provider);
       factory_rw=new ethers.Contract(factory_addr, factory_abi, signer);
-      //factory_rw.init();
       $('#mm_connect').hide();
     }
     function new_registry(){
-
+      name=prompt("Name");
+      factory_rw.create_registry(name, zero_addr);
     }
     function show_registries(){
       factory_ro.registries();
