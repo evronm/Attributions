@@ -16,7 +16,7 @@ contract RegistryTest is ExtendedDSTest {
   function testRegisterRegistry() public{
     Registry r = new Registry().init("test1");
     registry.register_registry(r);
-    assertEq(registry.children_names().length,1);
+    assertEq(registry.registries_names().length,1);
   }
   //also tests register_in_parent
   function testFailDuplicateName() public {
@@ -40,14 +40,14 @@ contract RegistryTest is ExtendedDSTest {
     r22.register_in_parent(r2);
     r23.register_in_parent(r2);
 
-    assertEq(registry.children_names().length,2);
-    assertEq(r1.children_names().length,2);
-    assertEq(r2.children_names().length,3);
+    assertEq(registry.registries_names().length,2);
+    assertEq(r1.registries_names().length,2);
+    assertEq(r2.registries_names().length,3);
 
-    assertTrue(stringEq(registry.children_names()[0],r1.name()));
-    assertTrue(stringEq(registry.children_names()[1],r2.name()));
-    assertTrue(stringEq(r1.children_names()[0],r11.name()));
-    assertTrue(stringEq(r2.children_names()[2],r23.name()));
+    assertTrue(stringEq(registry.registries_names()[0],r1.name()));
+    assertTrue(stringEq(registry.registries_names()[1],r2.name()));
+    assertTrue(stringEq(r1.registries_names()[0],r11.name()));
+    assertTrue(stringEq(r2.registries_names()[2],r23.name()));
   }
 
   function testAttestationRegistry() public {
