@@ -11,12 +11,20 @@
     const zero_addr="0x0000000000000000000000000000000000000000";
     var provider, signer, factory_ro, factory_rw;
     //poor man's html factory
-    ['h1','h2','div','ul','li','button','a'].forEach((tag) => {
+    ['h1','h2','h3','div','p','ul','li','button','a'].forEach((tag) => {
       window[tag]=(attrs, content="") => {
         return $('<'+tag+' />', attrs).append(content);
       }
     })
+    //this is quite ugly, but seems the least of the available uglies
     Zepto(function($){$('body').append(div({id: factory_addr}))})
+
+    //populate a registry when clicked
+    $(document).on('click', 'button.expand', function (e) {
+      var par_reg=$(evt.target).parent('.registry_cont').attr('id')
+      get_registries(par_reg).then((regs) => show_registries(regs, par_reg, ))
+    })
+
     function mm_connect() {
       provider = new ethers.providers.Web3Provider(window.ethereum);
       provider.send("eth_requestAccounts", []);
@@ -26,23 +34,29 @@
       $('#mm_connect').hide();
       get_registries().then((regs) => show_registries(regs));
     }
+
     function new_registry(parent=zero_addr){
       name=prompt("Name");
       if (name > ""){factory_rw.create_registry(name, parent);}
     }
+
     function get_registries(registry=factory_ro){
       if (! registry.registries_names) {
         registry=new ethers.Contract(registry, registry_abi, provider);
       }
       return registry.registries_names();
     }
+
     function show_registries(registries, addr=factory_addr, name="Top Level"){
       $('#'+addr).append(div({class: "registry", id: addr},[
         h2(name),
         button({onclick: "new_registry(addr)"}, "New registry under " + name),
-        ul({class: "registries"}, registries.map((reg) => li({class: "registry"}, reg)))
+        ul({class: "registries"}, registries.map((reg) => li({class: "registry"},  [button({class: 'expand'}, '+'), reg])))
       ]));
-      //registries.forEach((reg) => target.append(li({class: "registry"},reg)));
+    }
+
+    function get_reg_address(raddr,reg){
+      return new ethers.Contract(raddr, registry_abi, provider).registries(reg);
     }
   </script>
   <body>
