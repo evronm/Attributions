@@ -10,11 +10,13 @@
     const registry_abi=[ { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_attestation_strings", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "string", "name": "", "type": "string" } ], "name": "_attestations", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "string", "name": "", "type": "string" } ], "name": "_registries", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_registries_names", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "attestation_strings", "outputs": [ { "internalType": "string[]", "name": "", "type": "string[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "string", "name": "attestation_string", "type": "string" } ], "name": "attestations", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "string", "name": "name_", "type": "string" } ], "name": "init", "outputs": [ { "internalType": "contract Registry", "name": "", "type": "address" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "name", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "string", "name": "attestation", "type": "string" }, { "internalType": "address", "name": "child", "type": "address" } ], "name": "register_attestation", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "contract Registry", "name": "parent", "type": "address" } ], "name": "register_in_parent", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "contract Registry", "name": "child", "type": "address" } ], "name": "register_registry", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "string", "name": "child_name", "type": "string" } ], "name": "registries", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "registries_names", "outputs": [ { "internalType": "string[]", "name": "", "type": "string[]" } ], "stateMutability": "view", "type": "function" } ];
     const zero_addr="0x0000000000000000000000000000000000000000";
     var provider, signer, factory_ro, factory_rw;
+    //poor man's html factory
     ['h1','h2','div','ul','li','button','a'].forEach((tag) => {
-      window[tag]=(attrs, content) => {
+      window[tag]=(attrs, content="") => {
         return $('<'+tag+' />', attrs).append(content);
       }
     })
+    Zepto(function($){$('body').append(div({id: factory_addr}))})
     function mm_connect() {
       provider = new ethers.providers.Web3Provider(window.ethereum);
       provider.send("eth_requestAccounts", []);
@@ -24,24 +26,27 @@
       $('#mm_connect').hide();
       get_registries().then((regs) => show_registries(regs));
     }
-    function new_registry(){
+    function new_registry(parent=zero_addr){
       name=prompt("Name");
-      factory_rw.create_registry(name, zero_addr);
+      if (name > ""){factory_rw.create_registry(name, parent);}
     }
     function get_registries(registry=factory_ro){
+      if (! registry.registries_names) {
+        registry=new ethers.Contract(registry, registry_abi, provider);
+      }
       return registry.registries_names();
     }
-    function show_registries(registries, target=$('#registries')){
-      registries.forEach((reg) => target.append(li({},reg)));
+    function show_registries(registries, addr=factory_addr, name="Top Level"){
+      $('#'+addr).append(div({class: "registry", id: addr},[
+        h2(name),
+        button({onclick: "new_registry(addr)"}, "New registry under " + name),
+        ul({class: "registries"}, registries.map((reg) => li({class: "registry"}, reg)))
+      ]));
+      //registries.forEach((reg) => target.append(li({class: "registry"},reg)));
     }
   </script>
   <body>
     <h1>Attestation Management</h1>
     <button id="mm_connect" onclick="mm_connect()">Connect to wallet</button>
-    <div class="registry">
-      <h2>Registries</h2>
-      <button id="new_registry" onclick="new_registry()">New Registry</button>
-      <ul id="registries"></ul>
-    </div>
   </body>
 </html>
