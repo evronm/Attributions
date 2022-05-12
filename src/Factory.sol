@@ -7,8 +7,11 @@ import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
 
 contract Factory is Initializable {
-  string[] public _registries_names;
-  mapping (string => address) public _registries;
+  struct reg {
+    string name;
+    address addy;
+  }
+  reg[] public _registries;
   address private base_registry;
   address private base_free_form;
   address private base_attendance;
@@ -23,8 +26,7 @@ contract Factory is Initializable {
     if (parent > address(0)) {
       Registry(parent).register_registry(child);
     } else {
-      _registries_names.push(child.name());
-      _registries[child.name()]=address(child);
+      _registries.push(reg({name:child.name(),addy:address(child)}));
     }
     return child;
   }
@@ -44,6 +46,5 @@ contract Factory is Initializable {
     }
     return att;
   }
-  function registries (string memory child_name) public view returns (address){ return _registries[child_name]; }
-  function registries_names () public view returns (string[] memory){ return _registries_names; }
+  function registries () public view returns (reg[] memory){ return _registries; }
 }
