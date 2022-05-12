@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
 
+import './Common.sol';
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
+
 contract Registry is Initializable {
-  string[] public _registries_names;
-  mapping (string => address) public _registries;
-  string[] public _attestation_strings;
-  mapping (string => address) public _attestations;
+  reg[] public _registries;
+  reg[] public _attestations;
 
   string public name;
 
@@ -16,10 +16,8 @@ contract Registry is Initializable {
     return this;
   }
 
-  function attestations (string memory attestation_string) public view returns (address){ return _attestations[attestation_string]; }
-  function attestation_strings () public view returns (string[] memory){ return _attestation_strings; }
-  function registries (string memory child_name) public view returns (address){ return _registries[child_name]; }
-  function registries_names () public view returns (string[] memory){ return _registries_names; }
+  function attestations () public view returns (reg[] memory){ return _attestations; }
+  function registries () public view returns (reg[] memory){ return _registries; }
 
   function register_in_parent(Registry parent) public {
     parent.register_registry(this);
@@ -27,16 +25,12 @@ contract Registry is Initializable {
 
 
   function register_registry(Registry child) public {
-    require (registries(child.name())==address(0), "This registry is already registered");
-    _registries_names.push(child.name());
-    _registries[child.name()]=address(child);
-  
+    require (Utils.find_in_reg_array(_registries, child.name()) == -1, "A registry by that name already exists in this registry");
+    _registries.push(reg({name:child.name(),addy:address(child)}));
   }
   //using attestation string as unique here; eliminates the need for a registration function for each attestation class.
   function register_attestation(string memory attestation, address child) public {
-    require (attestations(attestation)==address(0), "This attestation is already registered");
-    _attestation_strings.push(attestation);
-    _attestations[attestation]=child;
-  
+    require (Utils.find_in_reg_array(_attestations,attestation) == -1, "An identical attestation already exists in this registry");
+    _registries.push(reg({name:attestation,addy:child}));
   }
 }

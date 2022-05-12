@@ -19,12 +19,12 @@ contract FactoryTest is ExtendedDSTest {
     Registry r11=factory.create_registry("r11",address(r1));
     Registry r12=factory.create_registry("r12",address(r1));
     Registry r13=factory.create_registry("r13",address(r1));
-    assertEq(3, r1.registries_names().length);
+    assertEq(3, r1.registries().length);
     assertEq(address(r11), r1.registries("r11"));
     assertEq(address(r12), r1.registries(r12.name()));
     assertEq(address(r13), r1.registries(r13.name()));
-    assertEq(1,factory.registries().length);
 
+    assertEq(1,factory.registries().length);
     assertEq(r1.name(), factory.registries()[0].name);
     assertEq(address(r1), factory.registries()[0].addy);
   }

@@ -6,11 +6,9 @@ import './Attestations.sol';
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
 
+
 contract Factory is Initializable {
-  struct reg {
-    string name;
-    address addy;
-  }
+  // from Registry.sol
   reg[] public _registries;
   address private base_registry;
   address private base_free_form;
