@@ -19,4 +19,12 @@ library Utils {
     }
     return -1;
   }
+  function get_address_from_string(reg[] memory regs, string memory key) public pure returns (address) {
+    int i=find_in_reg_array(regs, key);
+    if (i > -1) {
+        return regs[uint(i)].addy;
+    } else {
+        return address(0);
+    }
+  }
 }

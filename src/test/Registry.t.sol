@@ -16,7 +16,7 @@ contract RegistryTest is ExtendedDSTest {
   function testRegisterRegistry() public{
     Registry r = new Registry().init("test1");
     registry.register_registry(r);
-    assertEq(registry.registries_names().length,1);
+    assertEq(registry.registries().length,1);
   }
   //also tests register_in_parent
   function testFailDuplicateName() public {
@@ -40,20 +40,21 @@ contract RegistryTest is ExtendedDSTest {
     r22.register_in_parent(r2);
     r23.register_in_parent(r2);
 
-    assertEq(registry.registries_names().length,2);
-    assertEq(r1.registries_names().length,2);
-    assertEq(r2.registries_names().length,3);
+    assertEq(registry.registries().length,2);
+    assertEq(r1.registries().length,2);
+    assertEq(r2.registries().length,3);
 
-    assertTrue(stringEq(registry.registries_names()[0],r1.name()));
-    assertTrue(stringEq(registry.registries_names()[1],r2.name()));
-    assertTrue(stringEq(r1.registries_names()[0],r11.name()));
-    assertTrue(stringEq(r2.registries_names()[2],r23.name()));
+    assertTrue(stringEq(registry.registries()[0].name,r1.name()));
+    assertTrue(stringEq(registry.registries()[1].name,r2.name()));
+    assertTrue(stringEq(r1.registries()[0].name,r11.name()));
+    assertTrue(stringEq(r2.registries()[2].name,r23.name()));
   }
 
   function testAttestationRegistry() public {
     registry.register_attestation(freeform.attestation(),address(freeform));
-    assertEq(registry.attestation_strings().length, 1);
-    assertEq(registry.attestations(freeform.attestation()),address(freeform));
+    assertEq(registry.attestations().length, 1);
+    assertEq(Utils.get_address_from_string(registry.attestations(),freeform.attestation()),address(freeform));
+    //assertEq(registry.attestations(freeform.attestation()),address(freeform));
   }
 
   function testFailDupAttestation() public {
