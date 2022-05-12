@@ -21,8 +21,9 @@
 
     //populate a registry when clicked
     $(document).on('click', 'button.expand', function (e) {
-      var par_reg=$(evt.target).parent('.registry').attr('id')
-      get_registries(par_reg).then((regs) => show_registries(regs, par_reg, ))
+      var par_reg=$(e.target).parent('.registry').attr('id');
+      var par_name=$(e.target).parent('.registry').attr('name');
+      get_registries(par_reg).then((regs) => show_registries(regs, par_reg, par_name));
     })
 
     function mm_connect() {
@@ -52,7 +53,7 @@
       $('#'+addr).append(div({class: "registry", id: addr},[
         h2(name),
         button({onclick: "new_registry('"+addr+"')"}, "New registry under " + name),
-        ul({class: "registries"}, registries.map((reg) => li({id: reg.addy, class: "registry"},  [button({class: 'expand'}, '+'), reg.name])))
+        ul({class: "registries"}, registries.map((reg) => li({id: reg.addy, name: reg.name, class: "registry"},  [button({class: 'expand'}, '+'), reg.name])))
       ]));
     }
 
