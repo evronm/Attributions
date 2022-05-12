@@ -31,6 +31,6 @@ contract Registry is Initializable {
   //using attestation string as unique here; eliminates the need for a registration function for each attestation class.
   function register_attestation(string memory attestation, address child) public {
     require (Utils.find_in_reg_array(_attestations,attestation) == -1, "An identical attestation already exists in this registry");
-    _registries.push(reg({name:attestation,addy:child}));
+    _attestations.push(reg({name:attestation,addy:child}));
   }
 }
