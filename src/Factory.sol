@@ -24,6 +24,7 @@ contract Factory is Initializable {
     if (parent > address(0)) {
       Registry(parent).register_registry(child);
     } else {
+      require (Utils.find_in_reg_array(_registries, child_name) == -1, "A registry by that name already exists in this factory");
       _registries.push(reg({name:child.name(),addy:address(child)}));
     }
     return child;

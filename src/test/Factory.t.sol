@@ -14,6 +14,10 @@ contract FactoryTest is ExtendedDSTest {
     Registry test_reg=factory.create_registry("test", address(0));
     assertTrue(stringEq("test",test_reg.name()));
   }
+  function testFailDupRegistries() public {
+    factory.create_registry("test", address(0));
+    factory.create_registry("test", address(0));
+  }
   function testRegFactoryTree() public {
     Registry r1=factory.create_registry("r1",address(0));
     Registry r11=factory.create_registry("r11",address(r1));
@@ -28,7 +32,6 @@ contract FactoryTest is ExtendedDSTest {
     assertEq(r1.name(), factory.registries()[0].name);
     assertEq(address(r1), factory.registries()[0].addy);
   }
-
   
   function testFreeFormFactory() public {
     Registry r1=factory.create_registry("r1",address(0));
