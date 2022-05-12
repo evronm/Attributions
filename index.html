@@ -42,13 +42,14 @@
       if (name > ""){factory_rw.create_registry(name, parent);}
     }
 
-    function get_freeforms(registry=factory_ro){
+    function get_freeforms(registry){
+      return new ethers.Contract(registry, registry_abi, provider).freeforms();
     }
-    function show_freeforms(attestations, addr=factory_addr, name="Top Level"){
+    function show_freeforms(attestations, addr, name){
     }
-    function get_attendances(registry=factory_ro){
+    function get_attendances(registry){
     }
-    function show_attendances(attestations, addr=factory_addr, name="Top Level"){
+    function show_attendances(attestations, addr, name){
     }
 
     function get_registries(registry=factory_addr){
