@@ -53,34 +53,3 @@ contract AttestationList is Initializable {
   }
 
 }
-/*
-contract FreeForm is AttestationList, Initializable { 
-  string private _attestation;
-  function init (string memory attestation_) public initializer returns (FreeForm) {
-    _attestation=attestation_;
-    return this;
-  }
-  function attestation () public view returns (string memory) {
-    return  _attestation;
-  }
-}
-
-contract Attendance is AttestationList, Initializable {
-  struct event_details {
-    string name;
-    string place;
-    string date;
-  }
-  event_details private _attestation;
-  function init (string memory name,string memory place,string memory date) public initializer returns (Attendance) {
-    _attestation.name=name;
-    _attestation.place=place;
-    _attestation.date=date;
-    return this;
-  }
-
-  function attestation () public view returns (string memory) {
-    return  string(string.concat("name: ", bytes(_attestation.name), "\n", "place: ", bytes(_attestation.place),"\n", "date: ", bytes(_attestation.date)));
-  }
-}
-*/

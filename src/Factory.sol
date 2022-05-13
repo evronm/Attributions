@@ -11,12 +11,10 @@ contract Factory is Initializable {
   // from Registry.sol
   reg[] public _registries;
   address private base_registry;
-  //address private base_free_form;
-  //address private base_attendance;
+  address private base_attestation;
   function init() public initializer returns (Factory) {
     base_registry=address(new Registry().init(""));
-   // base_free_form=address(new FreeForm().init(""));
-   // base_attendance=address(new Attendance().init("","",""));
+    base_attestation=address(new AttestationList());
     return this;
   }
   function create_registry(string memory child_name, address parent) public returns (Registry) {
@@ -30,22 +28,13 @@ contract Factory is Initializable {
     return child;
   }
 
-/*
-  function create_free_form(string memory attestation, address registry) public returns (FreeForm) {
-    FreeForm ff=FreeForm(Clones.clone(base_free_form)).init(attestation);
+  function create_attestation(kv[] calldata props, address registry) public returns (AttestationList) {
+    AttestationList al=AttestationList(Clones.clone(base_attestation)).init(props);
     if (registry > address(0)) {
-      Registry(registry).register_attestation(attestation,address(ff));
+      Registry(registry).register_attestation(props[uint(Kvs.get_index_from_key(props, "Name"))].value,address(al));
     }
-    return ff;
+    return al;
   }
 
-  function create_attendance(string memory name, string memory location, string memory date, address registry) public returns (Attendance) {
-    Attendance att=Attendance(Clones.clone(base_attendance)).init(name, location, date);
-    if (registry > address(0)) {
-      Registry(registry).register_attestation(att.attestation(),address(att));
-    }
-    return att;
-  }
-  */
   function registries () public view returns (reg[] memory){ return _registries; }
 }
