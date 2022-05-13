@@ -6,8 +6,8 @@ import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
 
 contract Registry is Initializable {
-  reg[] public _registries;
-  reg[] public _attestations;
+  str_addr[] public _registries;
+  str_addr[] public _attestations;
 
   string public name;
 
@@ -16,20 +16,20 @@ contract Registry is Initializable {
     return this;
   }
 
-  function attestations () public view returns (reg[] memory){ return _attestations; }
-  function registries () public view returns (reg[] memory){ return _registries; }
+  function attestations () public view returns (str_addr[] memory){ return _attestations; }
+  function registries () public view returns (str_addr[] memory){ return _registries; }
 
   function register_in_parent(Registry parent) public {
     parent.register_registry(this);
   }
 
   function register_registry(Registry child) public {
-    require (Regs.find_in_reg_array(_registries, child.name()) == -1, "A registry by that name already exists in this registry");
-    _registries.push(reg({name:child.name(),addy:address(child)}));
+    require (Str_addrs.find_in_str_addr_array(_registries, child.name()) == -1, "A registry by that name already exists in this registry");
+    _registries.push(str_addr({name:child.name(),addy:address(child)}));
   }
   //using attestation name as unique here; Subject to change, I guess...
   function register_attestation(string memory attestation_name, address child) public {
-    require (Regs.find_in_reg_array(_attestations,attestation_name) == -1, "An identical attestation already exists in this registry");
-    _attestations.push(reg({name:attestation_name,addy:child}));
+    require (Str_addrs.find_in_str_addr_array(_attestations,attestation_name) == -1, "An identical attestation already exists in this registry");
+    _attestations.push(str_addr({name:attestation_name,addy:child}));
   }
 }

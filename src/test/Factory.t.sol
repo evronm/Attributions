@@ -25,9 +25,9 @@ contract FactoryTest is ExtendedDSTest {
     Registry r12=factory.create_registry("r12",address(r1));
     Registry r13=factory.create_registry("r13",address(r1));
     assertEq(3, r1.registries().length);
-    assertEq(address(r11), Regs.get_address_from_string(r1.registries(), "r11"));
-    assertEq(address(r12), Regs.get_address_from_string(r1.registries(),r12.name()));
-    assertEq(address(r13), Regs.get_address_from_string(r1.registries(),r13.name()));
+    assertEq(address(r11), Str_addrs.get_address_from_string(r1.registries(), "r11"));
+    assertEq(address(r12), Str_addrs.get_address_from_string(r1.registries(),r12.name()));
+    assertEq(address(r13), Str_addrs.get_address_from_string(r1.registries(),r13.name()));
 
     assertEq(1,factory.registries().length);
     assertEq(r1.name(), factory.registries()[0].name);
@@ -41,6 +41,6 @@ contract FactoryTest is ExtendedDSTest {
     assert(stringEq("test",a.props()[0].value));
     AttestationList b=factory.create_attestation(foo, address(r1));
     assertEq(1, r1.attestations().length);
-    assertEq(address(b),Regs.get_address_from_string(r1.attestations(), "test"));
+    assertEq(address(b),Str_addrs.get_address_from_string(r1.attestations(), "test"));
   }
 }

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
 
-struct reg {
+struct str_addr {
   string name;
   address addy;
 }
@@ -10,6 +10,10 @@ struct kv {
   string key;
   string value;
 }
+struct tag {
+  string tag;
+  address[] addresses;
+}
 
 library Utils {
   function compareStrings(string memory a, string memory b) public pure returns (bool) {
@@ -17,20 +21,20 @@ library Utils {
   }
 }
 
-library Regs {
+library Str_addrs {
 
-  function find_in_reg_array(reg[] memory regs, string memory name) internal pure returns (int) {
-    for (uint i=0;i < regs.length; i++) {
-      if ( Utils.compareStrings(regs[i].name, name)) {
+  function find_in_str_addr_array(str_addr[] memory str_addrs, string memory name) internal pure returns (int) {
+    for (uint i=0;i < str_addrs.length; i++) {
+      if ( Utils.compareStrings(str_addrs[i].name, name)) {
         return int(i);
       }
     }
     return -1;
   }
-  function get_address_from_string(reg[] memory regs, string memory key) public pure returns (address) {
-    int i=find_in_reg_array(regs, key);
+  function get_address_from_string(str_addr[] memory str_addrs, string memory key) public pure returns (address) {
+    int i=find_in_str_addr_array(str_addrs, key);
     if (i > -1) {
-        return regs[uint(i)].addy;
+        return str_addrs[uint(i)].addy;
     } else {
         return address(0);
     }
@@ -52,4 +56,21 @@ library Kvs {
     return kvs[uint(i)].value;
   }
 
+}
+
+library Tags {
+  function get_tag_index(tag[] memory tags, string memory key) public pure returns (int) {
+    for (uint i=0;i < tags.length; i++) {
+      if ( Utils.compareStrings(tags[i].tag, key)) {
+        return int(i);
+      }
+    }
+    return -1;
+
+  }
+  function get_addresses(tag[] memory tags, string memory key) public pure returns (address[] memory) {
+    int i=get_tag_index(tags, key);
+    require(i > -1);
+    return tags[uint(i)].addresses;
+  }
 }

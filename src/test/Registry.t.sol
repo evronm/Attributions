@@ -53,7 +53,7 @@ contract RegistryTest is ExtendedDSTest {
     AttestationList a=new AttestationList().init(kvs);
     registry.register_attestation(a.props()[0].key,address(a));
     assertEq(registry.attestations().length, 1);
-    assertEq(Regs.get_address_from_string(registry.attestations(),a.props()[0].key),address(a));
+    assertEq(Str_addrs.get_address_from_string(registry.attestations(),a.props()[0].key),address(a));
   }
   function testFailDupAttestation() public {
     kvs.push(kv("Name", "test"));

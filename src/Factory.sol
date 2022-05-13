@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/proxy/Clones.sol";
 
 contract Factory is Initializable {
   // from Registry.sol
-  reg[] public _registries;
+  str_addr[] public _registries;
   address private base_registry;
   address private base_attestation;
   function init() public initializer returns (Factory) {
@@ -22,8 +22,8 @@ contract Factory is Initializable {
     if (parent > address(0)) {
       Registry(parent).register_registry(child);
     } else {
-      require (Regs.find_in_reg_array(_registries, child_name) == -1, "A registry by that name already exists in this factory");
-      _registries.push(reg({name:child.name(),addy:address(child)}));
+      require (Str_addrs.find_in_str_addr_array(_registries, child_name) == -1, "A registry by that name already exists in this factory");
+      _registries.push(str_addr({name:child.name(),addy:address(child)}));
     }
     return child;
   }
@@ -36,5 +36,5 @@ contract Factory is Initializable {
     return al;
   }
 
-  function registries () public view returns (reg[] memory){ return _registries; }
+  function registries () public view returns (str_addr[] memory){ return _registries; }
 }
