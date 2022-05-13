@@ -53,7 +53,7 @@ contract RegistryTest is ExtendedDSTest {
   function testAttestationRegistry() public {
     registry.register_attestation(freeform.attestation(),address(freeform));
     assertEq(registry.attestations().length, 1);
-    assertEq(Utils.get_address_from_string(registry.attestations(),freeform.attestation()),address(freeform));
+    assertEq(Regs.get_address_from_string(registry.attestations(),freeform.attestation()),address(freeform));
     //assertEq(registry.attestations(freeform.attestation()),address(freeform));
   }
 

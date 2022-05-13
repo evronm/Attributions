@@ -2,13 +2,26 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
+import "./Common.sol";
 
-abstract contract AttestationList {
+contract AttestationList is Initializable {
+
+  kv[] public _props; 
 
   mapping (address => address[]) public _attestations_by;
   mapping (address => address[]) public _attestations_about;
   address[] public _attestors;
   address[] public _attestees;
+
+  function init (kv[] calldata props_) public initializer returns (AttestationList) {
+    require (Kvs.get_index_from_key(props_, "Name") > -1, "Name required" );
+    //This is the only way to do this for now; EVM does not allow transfer of structures in memory to storage
+    for (uint i=0; i< props_.length; i++) {
+      _props.push(props_[i]);
+    }
+    return this;
+  }
+  function props () public view returns (kv[] memory) { return  _props; }
 
   function attestations_by (address attestor) public view returns (address[] memory){ return _attestations_by[attestor]; }
   function attestations_about (address attestee) public view returns (address[] memory){ return _attestations_about[attestee]; }

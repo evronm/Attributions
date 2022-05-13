@@ -4,6 +4,19 @@ pragma solidity >=0.7.0 <0.9.0;
 import "./extend_ds_test.sol";
 import "src/Attestations.sol";
 
+contract AttestationTest is ExtendedDSTest {
+  CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
+  kv[] kvs;
+
+  function testFailEmptyAttestation() public {
+    new AttestationList().init(kvs);
+  }
+  
+  function testNameOnly() public {
+    kvs.push(kv("Name", "test"));
+    new AttestationList().init(kvs);
+  }
+}
 // Using FrreForm to test abstract base class funtionality
 /*
 contract FreeFormAttestationTest is ExtendedDSTest {

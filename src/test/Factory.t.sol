@@ -24,9 +24,9 @@ contract FactoryTest is ExtendedDSTest {
     Registry r12=factory.create_registry("r12",address(r1));
     Registry r13=factory.create_registry("r13",address(r1));
     assertEq(3, r1.registries().length);
-    assertEq(address(r11), Utils.get_address_from_string(r1.registries(), "r11"));
-    assertEq(address(r12), Utils.get_address_from_string(r1.registries(),r12.name()));
-    assertEq(address(r13), Utils.get_address_from_string(r1.registries(),r13.name()));
+    assertEq(address(r11), Regs.get_address_from_string(r1.registries(), "r11"));
+    assertEq(address(r12), Regs.get_address_from_string(r1.registries(),r12.name()));
+    assertEq(address(r13), Regs.get_address_from_string(r1.registries(),r13.name()));
 
     assertEq(1,factory.registries().length);
     assertEq(r1.name(), factory.registries()[0].name);
@@ -41,7 +41,7 @@ contract FactoryTest is ExtendedDSTest {
     
     FreeForm ff2=factory.create_free_form("test",address(r1));
     assertEq(1, r1.attestations().length);
-    assertEq(address(ff2),Utils.get_address_from_string(r1.attestations(), "test"));
+    assertEq(address(ff2),Regs.get_address_from_string(r1.attestations(), "test"));
   }
   function testAttendanceFactory() public {
     Registry r1=factory.create_registry("r1",address(0));
@@ -50,7 +50,7 @@ contract FactoryTest is ExtendedDSTest {
 
     Attendance att2=factory.create_attendance("name","place","date",address(r1));
     assertEq(1, r1.attestations().length);
-    assertEq(address(att2),Utils.get_address_from_string(r1.attestations(), "name: name\nplace: place\ndate: date"));
+    assertEq(address(att2),Regs.get_address_from_string(r1.attestations(), "name: name\nplace: place\ndate: date"));
   }
   */
 }

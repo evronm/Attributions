@@ -12,14 +12,16 @@ struct kv {
 }
 
 library Utils {
-    
   function compareStrings(string memory a, string memory b) public pure returns (bool) {
     return keccak256(abi.encodePacked(a)) == keccak256(abi.encodePacked(b));
   }
+}
+
+library Regs {
 
   function find_in_reg_array(reg[] memory regs, string memory name) internal pure returns (int) {
     for (uint i=0;i < regs.length; i++) {
-      if ( compareStrings(regs[i].name, name)) {
+      if ( Utils.compareStrings(regs[i].name, name)) {
         return int(i);
       }
     }
@@ -33,4 +35,21 @@ library Utils {
         return address(0);
     }
   }
+}
+
+library Kvs {
+  function get_index_from_key(kv[] memory kvs, string memory key) internal pure returns (int) {
+    for (uint i=0;i < kvs.length; i++) {
+      if ( Utils.compareStrings(kvs[i].key, key)) {
+        return int(i);
+      }
+    }
+    return -1;
+  }
+  function get_value_from_key(kv[] memory kvs, string memory key) public pure returns (string memory) {
+    int i=get_index_from_key(kvs, key);
+    require(i > -1);
+    return kvs[uint(i)].value;
+  }
+
 }
