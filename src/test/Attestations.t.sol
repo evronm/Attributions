@@ -5,6 +5,7 @@ import "./extend_ds_test.sol";
 import "src/Attestations.sol";
 
 // Using FrreForm to test abstract base class funtionality
+/*
 contract FreeFormAttestationTest is ExtendedDSTest {
   FreeForm freeform;
   CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
@@ -61,3 +62,4 @@ contract AttendanceAttestationTest is ExtendedDSTest {
     assertTrue(stringEq(attendance.attestation(), "name: test event\nplace: test place\ndate: test date"));
   }
 }
+*/

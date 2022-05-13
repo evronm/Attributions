@@ -11,12 +11,12 @@ contract Factory is Initializable {
   // from Registry.sol
   reg[] public _registries;
   address private base_registry;
-  address private base_free_form;
-  address private base_attendance;
+  //address private base_free_form;
+  //address private base_attendance;
   function init() public initializer returns (Factory) {
     base_registry=address(new Registry().init(""));
-    base_free_form=address(new FreeForm().init(""));
-    base_attendance=address(new Attendance().init("","",""));
+   // base_free_form=address(new FreeForm().init(""));
+   // base_attendance=address(new Attendance().init("","",""));
     return this;
   }
   function create_registry(string memory child_name, address parent) public returns (Registry) {
@@ -30,6 +30,7 @@ contract Factory is Initializable {
     return child;
   }
 
+/*
   function create_free_form(string memory attestation, address registry) public returns (FreeForm) {
     FreeForm ff=FreeForm(Clones.clone(base_free_form)).init(attestation);
     if (registry > address(0)) {
@@ -45,5 +46,6 @@ contract Factory is Initializable {
     }
     return att;
   }
+  */
   function registries () public view returns (reg[] memory){ return _registries; }
 }

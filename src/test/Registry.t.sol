@@ -7,10 +7,10 @@ import "../Registry.sol";
 
 contract RegistryTest is ExtendedDSTest {
   Registry registry;
-  FreeForm freeform;
+//  FreeForm freeform;
   CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
   function setUp() public {
-    freeform = new FreeForm().init("freeformtest");
+   // freeform = new FreeForm().init("freeformtest");
     registry = new Registry().init("test");
   }
   function testRegisterRegistry() public{
@@ -49,7 +49,7 @@ contract RegistryTest is ExtendedDSTest {
     assertTrue(stringEq(r1.registries()[0].name,r11.name()));
     assertTrue(stringEq(r2.registries()[2].name,r23.name()));
   }
-
+/*
   function testAttestationRegistry() public {
     registry.register_attestation(freeform.attestation(),address(freeform));
     assertEq(registry.attestations().length, 1);
@@ -61,4 +61,5 @@ contract RegistryTest is ExtendedDSTest {
     registry.register_attestation(freeform.attestation(),address(freeform));
     registry.register_attestation(freeform.attestation(),address(freeform));
   }
+  */
 }

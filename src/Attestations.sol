@@ -38,6 +38,7 @@ abstract contract AttestationList {
   }
 
 }
+/*
 contract FreeForm is AttestationList, Initializable { 
   string private _attestation;
   function init (string memory attestation_) public initializer returns (FreeForm) {
@@ -67,3 +68,4 @@ contract Attendance is AttestationList, Initializable {
     return  string(string.concat("name: ", bytes(_attestation.name), "\n", "place: ", bytes(_attestation.place),"\n", "date: ", bytes(_attestation.date)));
   }
 }
+*/
