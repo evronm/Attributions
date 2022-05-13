@@ -4,60 +4,61 @@ pragma solidity >=0.7.0 <0.9.0;
 import "./extend_ds_test.sol";
 import "src/Attestations.sol";
 
-// Using FrreForm to test abstract base class funtionality
-contract FreeFormAttestationTest is ExtendedDSTest {
-  FreeForm freeform;
+contract AttestationTest is ExtendedDSTest {
   CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
-  function setUp() public {
-    freeform = new FreeForm().init("freeformtest");
-  }
+  kv[] kvs;
 
-  function testAttestationString() public {
-    assertTrue(stringEq("freeformtest",freeform.attestation()));
+  function testFailEmptyAttestation() public {
+    new AttestationList().init(kvs);
   }
-
-  function testEverythingEmpty() public {
-    assertEq(freeform.attestations_by(address(1)).length,0);
-    assertEq(freeform.attestations_about(address(1)).length,0);
-    assertEq(freeform.attestors().length,0);
-    assertEq(freeform.attestees().length,0);
+  function testFailDupPropName() public {
+    kvs.push(kv("Name", "test"));
+    kvs.push(kv("Name", "test"));
+    new AttestationList().init(kvs);
   }
-
+  
+  function testNameOnly() public {
+    kvs.push(kv("Name", "test"));
+    new AttestationList().init(kvs);
+  }
+  function testSeveralProps() public {
+    kvs.push(kv("Name", "test"));
+    kvs.push(kv("Place", "test place"));
+    kvs.push(kv("Date", "test date"));
+    kvs.push(kv("Event", "test event"));
+    AttestationList a=new AttestationList().init(kvs);
+    assertEq(4,a.props().length);
+    assert(stringEq("Name", a.props()[0].key));
+    assert(stringEq("test", a.props()[0].value));
+    assert(stringEq("Event", a.props()[3].key));
+    assert(stringEq("test event", a.props()[3].value));
+  }
   function testAttestation() public {
+    kvs.push(kv("Name", "test"));
+    AttestationList a=new AttestationList().init(kvs);
     cheats.startPrank(address(10));
-    freeform.attest(address(1));
-    freeform.attest(address(2));
-    freeform.attest(address(3));
+    a.attest(address(1));
+    a.attest(address(2));
+    a.attest(address(3));
     cheats.expectRevert(bytes("Attestation already exists."));
-    freeform.attest(address(3));
+    a.attest(address(3));
     cheats.stopPrank();
 
-    assertEq(freeform.attestors().length,1);
-    assertEq(freeform.attestees().length,3);
-    assertEq(freeform.attestations_about(address(1)).length,1);
+    assertEq(a.attestors().length,1);
+    assertEq(a.attestees().length,3);
+    assertEq(a.attestations_about(address(1)).length,1);
 
-    assertEq(freeform.attestations_by(address(10)).length,3);
+    assertEq(a.attestations_by(address(10)).length,3);
 
     cheats.startPrank(address(1));
-    freeform.attest(address(3));
-    freeform.attest(address(4));
+    a.attest(address(3));
+    a.attest(address(4));
     cheats.expectRevert(bytes("Attestation already exists."));
-    freeform.attest(address(3));
+    a.attest(address(3));
     cheats.stopPrank();
 
-    assertEq(freeform.attestors().length,2);
-    assertEq(freeform.attestees().length,4);
-    assertEq(freeform.attestations_about(address(3)).length,2);
-  }
-}
-
-contract AttendanceAttestationTest is ExtendedDSTest {
-  Attendance attendance;
-  CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
-  function setUp() public {
-    attendance = new Attendance().init("test event","test place", "test date");
-  }
-  function testAttestationString() public {
-    assertTrue(stringEq(attendance.attestation(), "name: test event\nplace: test place\ndate: test date"));
+    assertEq(a.attestors().length,2);
+    assertEq(a.attestees().length,4);
+    assertEq(a.attestations_about(address(3)).length,2);
   }
 }
