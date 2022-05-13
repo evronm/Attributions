@@ -16,7 +16,9 @@ contract AttestationList is Initializable {
   function init (kv[] calldata props_) public initializer returns (AttestationList) {
     require (Kvs.get_index_from_key(props_, "Name") > -1, "Name required" );
     //This is the only way to do this for now; EVM does not allow transfer of structures in memory to storage
+    //Plus, it allows for a dups check.
     for (uint i=0; i< props_.length; i++) {
+      require (Kvs.get_index_from_key(_props, props_[i].key) == -1, "Duplicate Property name given");
       _props.push(props_[i]);
     }
     return this;

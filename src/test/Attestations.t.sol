@@ -11,10 +11,20 @@ contract AttestationTest is ExtendedDSTest {
   function testFailEmptyAttestation() public {
     new AttestationList().init(kvs);
   }
+  function testFailDupPropName() public {
+    kvs.push(kv("Name", "test"));
+    kvs.push(kv("Name", "test"));
+    new AttestationList().init(kvs);
+  }
   
   function testNameOnly() public {
     kvs.push(kv("Name", "test"));
     new AttestationList().init(kvs);
+  }
+  function testSeveralProps() public {
+    kvs.push(kv("Name", "test"));
+    kvs.push(kv("Place", "test place"));
+    AttestationList a=new AttestationList().init(kvs);
   }
 }
 // Using FrreForm to test abstract base class funtionality
