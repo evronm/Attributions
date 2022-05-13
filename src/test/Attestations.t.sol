@@ -24,7 +24,14 @@ contract AttestationTest is ExtendedDSTest {
   function testSeveralProps() public {
     kvs.push(kv("Name", "test"));
     kvs.push(kv("Place", "test place"));
+    kvs.push(kv("Date", "test date"));
+    kvs.push(kv("Event", "test event"));
     AttestationList a=new AttestationList().init(kvs);
+    assertEq(4,a.props().length);
+    assert(stringEq("Name", a.props()[0].key));
+    assert(stringEq("test", a.props()[0].value));
+    assert(stringEq("Event", a.props()[3].key));
+    assert(stringEq("test event", a.props()[3].value));
   }
 }
 // Using FrreForm to test abstract base class funtionality
