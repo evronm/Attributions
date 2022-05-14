@@ -7,8 +7,6 @@ import "@openzeppelin/contracts/proxy/Clones.sol";
 
 
 contract Factory is Initializable {
-  // from Registry.sol
-  //str_addr[] public _registries;
   tag[] public _tags;
   address private base_attestation;
   function init() public initializer returns (Factory) {
@@ -35,5 +33,4 @@ contract Factory is Initializable {
   }
 
   function tags() public view returns (tag[] memory) {return _tags;}
-  //function registries () public view returns (str_addr[] memory){ return _registries; }
 }
