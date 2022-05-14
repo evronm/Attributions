@@ -1,6 +1,6 @@
 #!/bin/bash
 export RPC_URL=http://127.0.0.1:8545
-export KEY=0xf7d6fea62eeac6ceb372632ecc10702f4f97899d48647ddc88b0a31e438ad450
+export KEY=5ee56d995e0f821a360bc0e09aeab8c0593a2e96e037e080c6f70154cf1858d5
 
 export LIB_FILE='./src/Common.sol'
 export UTILS_ADDR=`forge create --legacy --rpc-url $RPC_URL --private-key $KEY $LIB_FILE:Utils|grep "Deployed to:"|sed "s/Deployed to: //"`
