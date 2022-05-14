@@ -23,17 +23,6 @@ contract Factory is Initializable {
     address[] memory foo;
     _tags.push(tag(new_tag,foo));
   }
-  /*
-  function create_registry(string memory child_name, address parent) public returns (Registry) {
-    Registry child=Registry(Clones.clone(base_registry)).init(child_name);
-    if (parent > address(0)) {
-      Registry(parent).register_registry(child);
-    } else {
-      require (Str_addrs.find_in_str_addr_array(_registries, child_name) == -1, "A registry by that name already exists in this factory");
-      _registries.push(str_addr({name:child.name(),addy:address(child)}));
-    }
-    return child;
-  } */
 
   function create_attestation(kv[] calldata props, string[] calldata tags_) public returns (Attestation) {
     Attestation al=Attestation(Clones.clone(base_attestation)).init(props,tags_);

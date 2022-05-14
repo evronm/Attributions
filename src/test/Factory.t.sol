@@ -22,9 +22,9 @@ contract FactoryTest is ExtendedDSTest {
   }
   function testAttestation() public {
     kvs.push(kv("Name", "test"));
-    kv[] memory foo=kvs; // can't convert storage pointer to memory array
+    kv[] memory mem_kvs=kvs; // can't convert storage pointer to memory array
     string[] memory mem_tags;
-    Attestation a=factory.create_attestation(foo, mem_tags);
+    Attestation a=factory.create_attestation(mem_kvs, mem_tags);
     assertEq(0, factory.tags().length);
     assertEq(0, a.tags().length);
     assert(stringEq("Name", a.props()[0].key));
@@ -35,13 +35,13 @@ contract FactoryTest is ExtendedDSTest {
     kvs.push(kv("Name", "test"));
     kvs.push(kv("Place", "test place"));
     kvs.push(kv("Date", "test date"));
-    kv[] memory foo=kvs; // can't convert storage pointer to memory array
+    kv[] memory mem_kvs=kvs; // can't convert storage pointer to memory array
     tags.push("tag1");
     tags.push("tag2");
     tags.push("tag3");
     tags.push("tag4");
     string[] memory mem_tags=tags;
-    Attestation a=factory.create_attestation(foo, mem_tags);
+    Attestation a=factory.create_attestation(mem_kvs, mem_tags);
     assertEq(3, a.props().length);
     assertEq(4, a.tags().length);
     assertEq(4, factory.tags().length);
@@ -52,6 +52,21 @@ contract FactoryTest is ExtendedDSTest {
     assert(stringEq("tag4", a.tags()[3]));
     assert(stringEq("tag4", factory.tags()[3].tag));
     assertEq(address(a), factory.tags()[3].addresses[0]);
-    kv[0].value="test1";
+
+    kvs[0].value="test1";
+    mem_kvs=kvs;
+    Attestation b=factory.create_attestation(mem_kvs, mem_tags);
+    assertEq(4, factory.tags().length);
+    assertEq(address(b), factory.tags()[0].addresses[1]);
+
+    kvs[0].value="test2";
+    mem_kvs=kvs;
+    tags.push("tag5");
+    mem_tags=tags;
+    Attestation c=factory.create_attestation(mem_kvs, mem_tags);
+    assertEq(5, factory.tags().length);
+    assertEq(address(c), factory.tags()[0].addresses[2]);
+    assertEq(address(c), factory.tags()[4].addresses[0]);
+
   }
 }
