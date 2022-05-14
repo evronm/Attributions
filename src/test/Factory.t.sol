@@ -52,4 +52,6 @@ contract FactoryTest is ExtendedDSTest {
     assert(stringEq("tag4", a.tags()[3]));
     assert(stringEq("tag4", factory.tags()[3].tag));
     assertEq(address(a), factory.tags()[3].addresses[0]);
+    kv[0].value="test1";
   }
+}
