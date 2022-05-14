@@ -7,11 +7,53 @@ import "../Factory.sol";
 contract FactoryTest is ExtendedDSTest {
   Factory factory;
   kv[] kvs;
+  string[] tags;
   CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
   function setUp() public {
     factory=new Factory().init();
   }
-  function testRegistryFactory() public{
+  function testNewTag() public {
+    factory.create_tag("test");
+    assertEq(1, factory.tags().length);
+  }
+  function testFailDupTag() public {
+    factory.create_tag("test");
+    factory.create_tag("test");
+  }
+  function testAttestation() public {
+    kvs.push(kv("Name", "test"));
+    kv[] memory foo=kvs; // can't convert storage pointer to memory array
+    string[] memory mem_tags;
+    Attestation a=factory.create_attestation(foo, mem_tags);
+    assertEq(0, factory.tags().length);
+    assertEq(0, a.tags().length);
+    assert(stringEq("Name", a.props()[0].key));
+    assert(stringEq("test", a.props()[0].value));
+
+  }
+  function testMuliPropMultiTagAttestation() public {
+    kvs.push(kv("Name", "test"));
+    kvs.push(kv("Place", "test place"));
+    kvs.push(kv("Date", "test date"));
+    kv[] memory foo=kvs; // can't convert storage pointer to memory array
+    tags.push("tag1");
+    tags.push("tag2");
+    tags.push("tag3");
+    tags.push("tag4");
+    string[] memory mem_tags=tags;
+    Attestation a=factory.create_attestation(foo, mem_tags);
+    assertEq(3, a.props().length);
+    assertEq(4, a.tags().length);
+    assertEq(4, factory.tags().length);
+    assert(stringEq("tag1", a.tags()[0]));
+    assert(stringEq("tag1", factory.tags()[0].tag));
+    assertEq(address(a), factory.tags()[0].addresses[0]);
+
+    assert(stringEq("tag4", a.tags()[3]));
+    assert(stringEq("tag4", factory.tags()[3].tag));
+    assertEq(address(a), factory.tags()[3].addresses[0]);
+  }
+  /*function testRegistryFactory() public{
     Registry test_reg=factory.create_registry("test", address(0));
     assertTrue(stringEq("test",test_reg.name()));
   }
@@ -42,5 +84,5 @@ contract FactoryTest is ExtendedDSTest {
     AttestationList b=factory.create_attestation(foo, address(r1));
     assertEq(1, r1.attestations().length);
     assertEq(address(b),Str_addrs.get_address_from_string(r1.attestations(), "test"));
-  }
+  } */
 }

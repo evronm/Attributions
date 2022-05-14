@@ -7,26 +7,27 @@ import "src/Attestations.sol";
 contract AttestationTest is ExtendedDSTest {
   CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
   kv[] kvs;
+  string[] tags;
 
   function testFailEmptyAttestation() public {
-    new AttestationList().init(kvs);
+    new Attestation().init(kvs,tags);
   }
   function testFailDupPropName() public {
     kvs.push(kv("Name", "test"));
     kvs.push(kv("Name", "test"));
-    new AttestationList().init(kvs);
+    new Attestation().init(kvs,tags);
   }
   
   function testNameOnly() public {
     kvs.push(kv("Name", "test"));
-    new AttestationList().init(kvs);
+    new Attestation().init(kvs,tags);
   }
   function testSeveralProps() public {
     kvs.push(kv("Name", "test"));
     kvs.push(kv("Place", "test place"));
     kvs.push(kv("Date", "test date"));
     kvs.push(kv("Event", "test event"));
-    AttestationList a=new AttestationList().init(kvs);
+    Attestation a=new Attestation().init(kvs,tags);
     assertEq(4,a.props().length);
     assert(stringEq("Name", a.props()[0].key));
     assert(stringEq("test", a.props()[0].value));
@@ -35,7 +36,7 @@ contract AttestationTest is ExtendedDSTest {
   }
   function testAttestation() public {
     kvs.push(kv("Name", "test"));
-    AttestationList a=new AttestationList().init(kvs);
+    Attestation a=new Attestation().init(kvs,tags);
     cheats.startPrank(address(10));
     a.attest(address(1));
     a.attest(address(2));
@@ -60,5 +61,15 @@ contract AttestationTest is ExtendedDSTest {
     assertEq(a.attestors().length,2);
     assertEq(a.attestees().length,4);
     assertEq(a.attestations_about(address(3)).length,2);
+  }
+  function testTags() public {
+    kvs.push(kv("Name", "test"));
+    tags.push("test");
+    tags.push("test2");
+    Attestation a=new Attestation().init(kvs,tags);
+    assertEq(2,a.tags().length);
+    assert(stringEq("test", a.tags()[0]));
+    assert(stringEq("test2", a.tags()[1]));
+
   }
 }

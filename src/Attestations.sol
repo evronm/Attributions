@@ -4,16 +4,17 @@ pragma solidity >=0.7.0 <0.9.0;
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "./Common.sol";
 
-contract AttestationList is Initializable {
+contract Attestation is Initializable {
 
   kv[] public _props; 
+  string[] public _tags;
 
   mapping (address => address[]) public _attestations_by;
   mapping (address => address[]) public _attestations_about;
   address[] public _attestors;
   address[] public _attestees;
 
-  function init (kv[] calldata props_) public initializer returns (AttestationList) {
+  function init (kv[] calldata props_, string[] calldata tags_) public initializer returns (Attestation) {
     require (Kvs.get_index_from_key(props_, "Name") > -1, "Name required" );
     //This is the only way to do this for now; EVM does not allow transfer of structures in memory to storage
     //Plus, it allows for a dups check.
@@ -21,9 +22,13 @@ contract AttestationList is Initializable {
       require (Kvs.get_index_from_key(_props, props_[i].key) == -1, "Duplicate Property name given");
       _props.push(props_[i]);
     }
+    for (uint i=0; i< tags_.length; i++) {
+      _tags.push(tags_[i]);
+    }
     return this;
   }
   function props () public view returns (kv[] memory) { return  _props; }
+  function tags () public view returns (string[] memory) { return  _tags; }
 
   function attestations_by (address attestor) public view returns (address[] memory){ return _attestations_by[attestor]; }
   function attestations_about (address attestee) public view returns (address[] memory){ return _attestations_about[attestee]; }
