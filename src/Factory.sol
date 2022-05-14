@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
 
-import './Registry.sol';
 import './Attestations.sol';
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
@@ -11,10 +10,8 @@ contract Factory is Initializable {
   // from Registry.sol
   //str_addr[] public _registries;
   tag[] public _tags;
-  address private base_registry;
   address private base_attestation;
   function init() public initializer returns (Factory) {
-    base_registry=address(new Registry().init(""));
     base_attestation=address(new Attestation());
     return this;
   }
