@@ -34,10 +34,14 @@
       "save_prop": function(e) {
         key=$("#prop_key")[0].value;
         val=$("#prop_val")[0].value;
-        $("#prop_form").before(tr({"class":"prop"},[td({},key),td({},val),button({"class":"delete_prop"},"X"),button({"class":"edit_prop"},"Edit")]));
-        $("#prop_key")[0].value="";
-        $("#prop_val")[0].value="";
-        $("#prop_key")[0].disabled=false;
+        if (key && val){
+          $("#prop_form").before(tr({"class":"prop"},[td({},key),td({},val),button({"class":"delete_prop"},"X"),button({"class":"edit_prop"},"Edit")]));
+          $("#prop_key")[0].value="";
+          $("#prop_val")[0].value="";
+          $("#prop_key")[0].disabled=false;
+          if (key=="Name") { $("#Name .delete_prop").remove(); $("#save_attestation")[0].disabled=false}
+          $("#prop_key").focus();
+        }
       },
       "delete_prop": function(e) {
         evt=e;$(e.target).parent('tr').remove();
@@ -47,6 +51,7 @@
         $("#prop_key")[0].value=p.children()[0].innerHTML;
         $("#prop_val")[0].value=p.children()[1].innerHTML;
         $("#prop_key")[0].disabled="Name"==$("#prop_key")[0].value; // "Name" is the only required prop
+        evt=e;$(e.target).parent('tr').remove();
       }
     }
 
@@ -66,6 +71,7 @@
       <tr id="prop_form"><td><input type="text" id="prop_key" value="Name" disabled="true" /></td><td><input type="text" id="prop_val" /></td><td><button id="save_prop">Save</button></td></tr>
     </table>
     <label for="tags">Tags:</label><input type="text" id="tags" name="tags" />
+    <button id="save_attestation" disabled="true">Save</button>
     <div id="tags"></div>
     <div id="attestations"></div>
   </body>
