@@ -11,14 +11,15 @@
     const zero_addr="0x0000000000000000000000000000000000000000";
     var provider, signer, factory_ro, factory_rw;
     //poor man's html factory
-    ['h1','h2','h3','div','p','ul','li','button','a'].forEach((tag) => {
+    ['h1','h2','h3','div','p','ul','li','button','a','table','thead','tbody','th','td','tr'].forEach((tag) => {
       window[tag]=(attrs, content="") => {
         return $('<'+tag+' />', attrs).append(content);
       }
     })
 
     Zepto(function($){
-      $('button').on("click", function(e) {button_actions[e.target.id].call()})
+      $('button').on("click", function(e) {button_actions[e.target.id].call()});
+      $('#attestation_props').on("click", '.prop', edit_prop); //this works for newly created props, hence the table target
     })
     const button_actions={
       "mm_connect": function() {
@@ -30,12 +31,22 @@
         $('#mm_connect').hide();
         get_tags().then((tags) => show_tags(tags));
       },
-      "save_prop": function(e) {alert("asdf")}
+      "save_prop": function(e) {
+        key=$("#prop_key")[0].value;
+        val=$("#prop_val")[0].value;
+        $("#prop_form").before(tr({"class":"prop"},[td({},key),td({},val)]))
+      }
     }
 
     function get_tags() {
     }
     function show_tags() {
+    }
+    function edit_prop(e){
+      evt=e;
+      p=$(e.target).parent('.prop'); //unexpectedly, the target is always the td, rather than the tr.  This is easier than figuring out why
+      $("#prop_key")[0].value=p.children()[0].innerHTML;
+      $("#prop_val")[0].value=p.children()[1].innerHTML;
     }
   </script>
   <body>
@@ -46,7 +57,7 @@
     <table id="attestation_props" border="1">
       <thead><th>Name</th><th>Value</th><th></th></thead>
         
-      <tr id="prop_form"><td><input type="text" id="prop_key" value="Name" /></td><td><input type="text" id="prop_val" /></td><td><button id="save_prop">Save</button></td></tr>
+      <tr id="prop_form"><td><input type="text" id="prop_key" value="Name" disabled="true" /></td><td><input type="text" id="prop_val" /></td><td><button id="save_prop">Save</button></td></tr>
     </table>
     <label for="tags">Tags:</label><input type="text" id="tags" name="tags" />
     <div id="tags"></div>
