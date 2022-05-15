@@ -29,7 +29,8 @@
         factory_ro=new ethers.Contract(factory_addr, factory_abi, provider);
         factory_rw=new ethers.Contract(factory_addr, factory_abi, signer);
         $('#mm_connect').hide();
-        get_tags().then((tags) => show_tags(tags));
+        $("#show_new_attestation").show();
+        //get_tags().then((tags) => show_tags(tags));
       },
       "save_prop": function(e) {
         key=$("#prop_key")[0].value;
@@ -52,6 +53,13 @@
         $("#prop_val")[0].value=p.children()[1].innerHTML;
         $("#prop_key")[0].disabled="Name"==$("#prop_key")[0].value; // "Name" is the only required prop
         evt=e;$(e.target).parent('tr').remove();
+      },
+      "show_new_attestation": function(e) {
+        $("#attestation_form").show();
+        $("#show_new_attestation").hide();
+      },
+      "save_attestation": function(e) {
+        $("#show_new_attestation").show();
       }
     }
 
@@ -63,15 +71,17 @@
   <body>
     <h1>Attestation Management</h1>
     <button id="mm_connect">Connect to wallet</button>
-    <button id="new_attestation" onclick="show_attestation_form()">New Attestation</button>
-    <h3>New Attestation</h3>
-    <table id="attestation_props" border="1">
-      <thead><th>Name</th><th>Value</th><th></th></thead>
-        
-      <tr id="prop_form"><td><input type="text" id="prop_key" value="Name" disabled="true" /></td><td><input type="text" id="prop_val" /></td><td><button id="save_prop">Save</button></td></tr>
-    </table>
-    <label for="tags">Tags:</label><input type="text" id="tags" name="tags" />
-    <button id="save_attestation" disabled="true">Save</button>
+    <button id="show_new_attestation" hidden="true">New Attestation</button>
+    <div id="attestation_form" hidden="true">
+      <h3>New Attestation</h3>
+      <table id="attestation_props" border="1">
+        <thead><th>Name</th><th>Value</th><th></th></thead>
+          
+        <tr id="prop_form"><td><input type="text" id="prop_key" value="Name" disabled="true" /></td><td><input type="text" id="prop_val" /></td><td><button id="save_prop">Save</button></td></tr>
+      </table>
+      <label for="tags">Tags:</label><input type="text" id="tags" name="tags" />
+      <button id="save_attestation" disabled="true">Save</button>
+    </div>
     <div id="tags"></div>
     <div id="attestations"></div>
   </body>
