@@ -60,13 +60,13 @@
       },
       "save_attestation": function(e) {
         var props = $("#attestation_props tr.prop").reduce(function(acc, row) {
-          acc.push({
-            "key":$(row).children()[0].innerHTML,
-            "val":$(row).children()[1].innerHTML
-          });
+          acc.push([
+            $(row).children()[0].innerHTML,
+            $(row).children()[1].innerHTML
+          ]);
           return acc;
         }, []);
-        factory_rw.create_attestation(props,[]);
+        factory_rw.create_attestation(props,$('#tags')[0].innerHTML.split(",").map((foo) => foo.trim()));
         $("#show_new_attestation").show();
       }
     }
@@ -87,7 +87,7 @@
           
         <tr id="prop_form"><td><input type="text" id="prop_key" value="Name" disabled="true" /></td><td><input type="text" id="prop_val" /></td><td><button id="save_prop">Save</button></td></tr>
       </table>
-      <label for="tags">Tags:</label><input type="text" id="tags" name="tags" />
+      <label for="tags">Tags(comma separated):</label><input type="text" id="tags" name="tags" />
       <button id="save_attestation" disabled="true">Save</button>
     </div>
     <div id="tags"></div>
