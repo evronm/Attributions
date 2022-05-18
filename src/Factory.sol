@@ -11,11 +11,7 @@ contract Factory is Initializable {
   using Tags for *;  // For some reason, I can use * but I can't use _tags.  Can't find a reason for this in the docs...
   using Kvs for *;
   mapping (string => address) public attestation_names;
-  address private base_attestation;
-  function init() public initializer returns (Factory) {
-    base_attestation=address(new Attestation());
-    return this;
-  }
+  address private base_attestation=address(new Attestation());
   function create_tag(string memory new_tag) public {
     require (_tags.get_tag_index(new_tag) == -1, "Tag already exists");
     string[] memory foo;

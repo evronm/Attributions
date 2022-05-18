@@ -10,7 +10,7 @@ contract FactoryTest is ExtendedDSTest {
   string[] tags;
   CheatCodes cheats = CheatCodes(HEVM_ADDRESS);
   function setUp() public {
-    factory=new Factory().init();
+    factory=new Factory();
   }
   function testNewTag() public {
     factory.create_tag("test");
