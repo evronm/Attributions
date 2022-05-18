@@ -16,6 +16,13 @@ contract FactoryTest is ExtendedDSTest {
     factory.create_tag("test");
     assertEq(1, factory.tags().length);
   }
+  function testFailDupName() public {
+    kvs.push(kv("Name", "test"));
+    kv[] memory mem_kvs=kvs; // can't convert storage pointer to memory array
+    string[] memory mem_tags;
+    factory.create_attestation(mem_kvs, mem_tags);
+    factory.create_attestation(mem_kvs, mem_tags);
+  }
   function testFailDupTag() public {
     factory.create_tag("test");
     factory.create_tag("test");

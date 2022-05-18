@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "./Common.sol";
 
 contract Attestation is Initializable {
+  using Kvs for *; 
 
   kv[] public _props; 
   string[] public _tags;
@@ -15,11 +16,11 @@ contract Attestation is Initializable {
   address[] public _attestees;
 
   function init (kv[] calldata props_, string[] calldata tags_) public initializer returns (Attestation) {
-    require (Kvs.get_index_from_key(props_, "Name") > -1, "Name required" );
+    require (props_.get_index_from_key("Name") > -1, "Name required" );
     //This is the only way to do this for now; EVM does not allow transfer of structures in memory to storage
     //Plus, it allows for a dups check.
     for (uint i=0; i< props_.length; i++) {
-      require (Kvs.get_index_from_key(_props, props_[i].key) == -1, "Duplicate Property name given");
+      require (_props.get_index_from_key(props_[i].key) == -1, "Duplicate Property name given");
       _props.push(props_[i]);
     }
     for (uint i=0; i< tags_.length; i++) {
