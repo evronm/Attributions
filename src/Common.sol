@@ -12,7 +12,7 @@ struct kv {
 }
 struct tag {
   string tag;
-  address[] addresses;
+  string[] names;
 }
 
 library Utils {
@@ -68,9 +68,9 @@ library Tags {
     return -1;
 
   }
-  function get_addresses(tag[] memory tags, string memory key) public pure returns (address[] memory) {
+  function get_names(tag[] memory tags, string memory key) public pure returns (string[] memory) {
     int i=get_tag_index(tags, key);
     require(i > -1);
-    return tags[uint(i)].addresses;
+    return tags[uint(i)].names;
   }
 }

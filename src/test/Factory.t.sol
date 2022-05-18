@@ -47,17 +47,17 @@ contract FactoryTest is ExtendedDSTest {
     assertEq(4, factory.tags().length);
     assert(stringEq("tag1", a.tags()[0]));
     assert(stringEq("tag1", factory.tags()[0].tag));
-    assertEq(address(a), factory.tags()[0].addresses[0]);
+    assertEq(Kvs.get_value_from_key(a.props(), "Name"), factory.tags()[0].names[0]);
 
     assert(stringEq("tag4", a.tags()[3]));
     assert(stringEq("tag4", factory.tags()[3].tag));
-    assertEq(address(a), factory.tags()[3].addresses[0]);
+    assertEq(Kvs.get_value_from_key(a.props(), "Name"), factory.tags()[3].names[0]);
 
     kvs[0].value="test1";
     mem_kvs=kvs;
     Attestation b=factory.create_attestation(mem_kvs, mem_tags);
     assertEq(4, factory.tags().length);
-    assertEq(address(b), factory.tags()[0].addresses[1]);
+    assertEq(Kvs.get_value_from_key(b.props(), "Name"), factory.tags()[0].names[1]);
 
     kvs[0].value="test2";
     mem_kvs=kvs;
@@ -65,8 +65,8 @@ contract FactoryTest is ExtendedDSTest {
     mem_tags=tags;
     Attestation c=factory.create_attestation(mem_kvs, mem_tags);
     assertEq(5, factory.tags().length);
-    assertEq(address(c), factory.tags()[0].addresses[2]);
-    assertEq(address(c), factory.tags()[4].addresses[0]);
+    assertEq(Kvs.get_value_from_key(c.props(),"Name"), factory.tags()[0].names[2]);
+    assertEq(Kvs.get_value_from_key(c.props(),"Name"), factory.tags()[4].names[0]);
 
   }
 }
