@@ -10,4 +10,6 @@ TODO:
 - Finish Front End
     - css framework
     - QR Code reader
--add command line options to deploy script for key and url
+- add command line options to deploy script for key and url
+- deal with empty tags, prop names, prop values
+- Error handling

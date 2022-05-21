@@ -10,7 +10,7 @@
     const attestation_abi=[ { "anonymous": false, "inputs": [ { "indexed": false, "internalType": "uint8", "name": "version", "type": "uint8" } ], "name": "Initialized", "type": "event" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" }, { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_attestations_about", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" }, { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_attestations_by", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_attestees", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_attestors", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_props", "outputs": [ { "internalType": "string", "name": "key", "type": "string" }, { "internalType": "string", "name": "value", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_tags", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "about_addr", "type": "address" } ], "name": "attest", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "attestee", "type": "address" } ], "name": "attestations_about", "outputs": [ { "internalType": "address[]", "name": "", "type": "address[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "attestor", "type": "address" } ], "name": "attestations_by", "outputs": [ { "internalType": "address[]", "name": "", "type": "address[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "attestees", "outputs": [ { "internalType": "address[]", "name": "", "type": "address[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "attestors", "outputs": [ { "internalType": "address[]", "name": "", "type": "address[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "components": [ { "internalType": "string", "name": "key", "type": "string" }, { "internalType": "string", "name": "value", "type": "string" } ], "internalType": "struct kv[]", "name": "props_", "type": "tuple[]" }, { "internalType": "string[]", "name": "tags_", "type": "string[]" } ], "name": "init", "outputs": [ { "internalType": "contract Attestation", "name": "", "type": "address" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "props", "outputs": [ { "components": [ { "internalType": "string", "name": "key", "type": "string" }, { "internalType": "string", "name": "value", "type": "string" } ], "internalType": "struct kv[]", "name": "", "type": "tuple[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "tags", "outputs": [ { "internalType": "string[]", "name": "", "type": "string[]" } ], "stateMutability": "view", "type": "function" } ];
 
     const zero_addr="0x0000000000000000000000000000000000000000";
-    var provider, signer, factory_ro, factory_rw;
+    var provider, signer, factory_ro, factory_rw, local_tags;
     //poor man's html factory
     ['h1','h2','h3','div','p','ul','li','button','a','table','thead','tbody','th','td','tr'].forEach((tag) => {
       window[tag]=(attrs, content="") => {
@@ -31,7 +31,7 @@
         factory_rw=new ethers.Contract(factory_addr, factory_abi, signer);
         $('#mm_connect').hide();
         $("#show_new_attestation").show();
-        get_tags().then((tags) => show_tags(tags));
+        show_tags();
       },
       "save_prop": function(e) {
         var key=$("#prop_key")[0].value;
@@ -70,15 +70,27 @@
         console.log(props);
         factory_rw.create_attestation(props,$('#tags')[0].value.split(",").map((foo) => foo.trim()));
         $("#show_new_attestation").show();
+      },
+      "tag_button": function(e) {
+        $("#attestations").empty();
+        $("#attestations").append(
+          local_tags[$(e.target).html()].map((name) => button({"class": "attestation_button"}, name))
+        );
       }
     }
 
-    function get_tags() {
-      return factory_ro.tags();
+    function show_tags() {
+      factory_ro.tags().then(function (tags) {
+        update_local_tags(tags);
+        $("#existing_tags").empty();
+        $("#existing_tags").append(tags.map((tag) => button({"class": "tag_button"}, tag[0]))); // tag struct from Common.sol
+      });
     }
-    function show_tags(tags) {
-      $("#tags").empty();
-      $("#tags").append(tags.map((tag) => tag[0]));
+    function update_local_tags(tags) {
+      local_tags={};
+      tags.forEach(function(tag) {
+        local_tags[tag.tag]=tag.names;
+      })
     }
   </script>
   <body>
@@ -95,7 +107,7 @@
       <label for="tags">Tags(comma separated):</label><input type="text" id="tags" name="tags" />
       <button id="save_attestation" disabled="true">Save</button>
     </div>
-    <div id="tags"></div>
+    <div id="existing_tags"></div>
     <div id="attestations"></div>
   </body>
 </html>
