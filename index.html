@@ -6,7 +6,7 @@
   <script type="text/javascript">
     //Edit this \/
     const factory_addr="0x04c3FF9828afFAcC8252CfD3b8da80f4C732D235";
-    const factory_abi=[ { "anonymous": false, "inputs": [ { "indexed": false, "internalType": "uint8", "name": "version", "type": "uint8" } ], "name": "Initialized", "type": "event" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_tags", "outputs": [ { "internalType": "string", "name": "tag", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "string", "name": "", "type": "string" } ], "name": "attestation_names", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "components": [ { "internalType": "string", "name": "key", "type": "string" }, { "internalType": "string", "name": "value", "type": "string" } ], "internalType": "struct kv[]", "name": "props", "type": "tuple[]" }, { "internalType": "string[]", "name": "tags_", "type": "string[]" } ], "name": "create_attestation", "outputs": [ { "internalType": "contract Attestation", "name": "", "type": "address" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "string", "name": "new_tag", "type": "string" } ], "name": "create_tag", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "tags", "outputs": [ { "components": [ { "internalType": "string", "name": "tag", "type": "string" }, { "internalType": "string[]", "name": "names", "type": "string[]" } ], "internalType": "struct tag[]", "name": "", "type": "tuple[]" } ], "stateMutability": "view", "type": "function" } ];
+    const factory_abi=[ { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_tags", "outputs": [ { "internalType": "string", "name": "tag", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "string", "name": "", "type": "string" } ], "name": "attestation_names", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "components": [ { "internalType": "string", "name": "key", "type": "string" }, { "internalType": "string", "name": "value", "type": "string" } ], "internalType": "struct kv[]", "name": "props", "type": "tuple[]" }, { "internalType": "string[]", "name": "tags_", "type": "string[]" } ], "name": "create_attestation", "outputs": [ { "internalType": "contract Attestation", "name": "", "type": "address" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "string", "name": "new_tag", "type": "string" } ], "name": "create_tag", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "tags", "outputs": [ { "components": [ { "internalType": "string", "name": "tag", "type": "string" }, { "internalType": "string[]", "name": "names", "type": "string[]" } ], "internalType": "struct tag[]", "name": "", "type": "tuple[]" } ], "stateMutability": "view", "type": "function" } ];
     const attestation_abi=[ { "anonymous": false, "inputs": [ { "indexed": false, "internalType": "uint8", "name": "version", "type": "uint8" } ], "name": "Initialized", "type": "event" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" }, { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_attestations_about", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" }, { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_attestations_by", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_attestees", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_attestors", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_props", "outputs": [ { "internalType": "string", "name": "key", "type": "string" }, { "internalType": "string", "name": "value", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_tags", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "about_addr", "type": "address" } ], "name": "attest", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "attestee", "type": "address" } ], "name": "attestations_about", "outputs": [ { "internalType": "address[]", "name": "", "type": "address[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "attestor", "type": "address" } ], "name": "attestations_by", "outputs": [ { "internalType": "address[]", "name": "", "type": "address[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "attestees", "outputs": [ { "internalType": "address[]", "name": "", "type": "address[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "attestors", "outputs": [ { "internalType": "address[]", "name": "", "type": "address[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "components": [ { "internalType": "string", "name": "key", "type": "string" }, { "internalType": "string", "name": "value", "type": "string" } ], "internalType": "struct kv[]", "name": "props_", "type": "tuple[]" }, { "internalType": "string[]", "name": "tags_", "type": "string[]" } ], "name": "init", "outputs": [ { "internalType": "contract Attestation", "name": "", "type": "address" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "props", "outputs": [ { "components": [ { "internalType": "string", "name": "key", "type": "string" }, { "internalType": "string", "name": "value", "type": "string" } ], "internalType": "struct kv[]", "name": "", "type": "tuple[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "tags", "outputs": [ { "internalType": "string[]", "name": "", "type": "string[]" } ], "stateMutability": "view", "type": "function" } ];
 
     const zero_addr="0x0000000000000000000000000000000000000000";
@@ -56,7 +56,7 @@
         $(e.target).parent('tr').remove();
       },
       "show_new_attestation": function(e) {
-        $("#attestation_form").show();
+        $("#new_attestation_form").show();
         $("#show_new_attestation").hide();
       },
       "save_attestation": function(e) {
@@ -76,6 +76,12 @@
         $("#attestations").append(
           local_tags[$(e.target).html()].map((name) => button({"class": "attestation_button"}, name))
         );
+      },
+      "attestation_button": function(e) {
+        factory_ro.attestation_names($(e.target).html()).then(function(addr){
+          attestation_ro=new ethers.Contract(addr, attestation_abi, provider);
+        });
+
       }
     }
 
@@ -97,7 +103,7 @@
     <h1>Attestation Management</h1>
     <button id="mm_connect">Connect to wallet</button>
     <button id="show_new_attestation" hidden="true">New Attestation</button>
-    <div id="attestation_form" hidden="true">
+    <div id="new_attestation_form" hidden="true">
       <h3>New Attestation</h3>
       <table id="attestation_props" border="1">
         <thead><th>Name</th><th>Value</th><th></th></thead>
@@ -109,5 +115,6 @@
     </div>
     <div id="existing_tags"></div>
     <div id="attestations"></div>
+    <div id="attestation"></div>
   </body>
 </html>
