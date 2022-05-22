@@ -22,7 +22,6 @@
     Zepto(function($){
       $(document).on("click",'button', function(e) {e.target.id && button_actions[e.target.id].call(null,e)});
       $(document).on("click",'button', function(e) {e.target.attributes["class"] && button_actions[e.target.attributes["class"].textContent].call(null,e)});
-      qr_reader=QrScanner($('video')[0], result => console.log('decoded qr code:', result));
     })
     const button_actions={
       "mm_connect": function() {
@@ -95,8 +94,14 @@
 
       },
       "attest": function(e) {
-
-      }
+        $("#attest_sign").show();
+        $("#attest").hide();
+      },
+      "scan": function(e) {
+        qr_reader=new QrScanner($('video')[0], function(result) {$("#attestation_target")[0].value=result; qr_reader.stop()});
+        qr_reader.start();
+      },
+      "sign": function(e) {},
     }
 
     function show_tags() {
@@ -129,7 +134,12 @@
     </div>
     <div id="existing_tags"></div>
     <div id="attestations"></div>
-    <div id="attestation"></div>
-    <video></video>
+    <div id="attestation"> </div>
+    <div hidden="true" id="attest_sign">
+      <label for="target">Target: </label><input name="target" id="attestation_target" />
+      <button id="scan">Scan</button>
+      <button id="sign">Sign</button>
+      <video></video>
+    </div>
   </body>
 </html>
