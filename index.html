@@ -11,7 +11,7 @@
     const attestation_abi=[ { "anonymous": false, "inputs": [ { "indexed": false, "internalType": "uint8", "name": "version", "type": "uint8" } ], "name": "Initialized", "type": "event" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" }, { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_attestations_about", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" }, { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_attestations_by", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_attestees", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_attestors", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_props", "outputs": [ { "internalType": "string", "name": "key", "type": "string" }, { "internalType": "string", "name": "value", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "_tags", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "about_addr", "type": "address" } ], "name": "attest", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "attestee", "type": "address" } ], "name": "attestations_about", "outputs": [ { "internalType": "address[]", "name": "", "type": "address[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "attestor", "type": "address" } ], "name": "attestations_by", "outputs": [ { "internalType": "address[]", "name": "", "type": "address[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "attestees", "outputs": [ { "internalType": "address[]", "name": "", "type": "address[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "attestors", "outputs": [ { "internalType": "address[]", "name": "", "type": "address[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "components": [ { "internalType": "string", "name": "key", "type": "string" }, { "internalType": "string", "name": "value", "type": "string" } ], "internalType": "struct kv[]", "name": "props_", "type": "tuple[]" }, { "internalType": "string[]", "name": "tags_", "type": "string[]" } ], "name": "init", "outputs": [ { "internalType": "contract Attestation", "name": "", "type": "address" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "props", "outputs": [ { "components": [ { "internalType": "string", "name": "key", "type": "string" }, { "internalType": "string", "name": "value", "type": "string" } ], "internalType": "struct kv[]", "name": "", "type": "tuple[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "tags", "outputs": [ { "internalType": "string[]", "name": "", "type": "string[]" } ], "stateMutability": "view", "type": "function" } ];
 
     const zero_addr="0x0000000000000000000000000000000000000000";
-    var provider, signer, factory_ro, factory_rw, local_tags, qr_reader;
+    var provider, signer, factory_ro, factory_rw, attestation_ro, attestation_rw, local_tags;
     //poor man's html factory
     ['h1','h2','h3','div','p','ul','li','button','a','table','thead','tbody','th','td','tr'].forEach((tag) => {
       window[tag]=(attrs, content="") => {
@@ -81,9 +81,9 @@
       "show_attestation": function(e) {
         $("#attestation").empty();
         factory_ro.attestation_names($(e.target).html()).then(function(addr){
-          var attestation_ro=new ethers.Contract(addr, attestation_abi, provider);
+          attestation_ro=new ethers.Contract(addr, attestation_abi, provider);
+          attestation_rw=new ethers.Contract(addr, attestation_abi, signer);
           attestation_ro.props().then(function (props) {
-            foo=props;
             $("#attestation").append(ul({}, props.map((prop) => li({},prop.key + ": " +prop.value))));
           }).then(function() {
             attestation_ro.tags().then(function(tags){
@@ -98,10 +98,12 @@
         $("#attest").hide();
       },
       "scan": function(e) {
-        qr_reader=new QrScanner($('video')[0], function(result) {$("#attestation_target")[0].value=result; qr_reader.stop()});
+        var qr_reader=new QrScanner($('video')[0], function(result) {$("#attestation_target")[0].value=result; qr_reader.stop()});
         qr_reader.start();
       },
-      "sign": function(e) {},
+      "sign": function(e) {
+
+      },
     }
 
     function show_tags() {
