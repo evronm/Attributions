@@ -42,7 +42,7 @@ contract Attestation is Initializable {
       _attestors.push(msg.sender);
     }
     if (attestations_about(about_addr).length==0) {
-      _attestees.push(msg.sender);
+      _attestees.push(about_addr);
     }
     _attestations_by[msg.sender].push(about_addr);
     _attestations_about[about_addr].push(msg.sender);
