@@ -134,7 +134,7 @@
         function (addrs) {
           addrs.forEach(
             (addr) => 
-            $("#attestors ul").append(
+            $("#attestors > ul").append(
               li({"id":"attestor"+addr},[addr,ul()])));return addrs}).then(
                 (addrs) => 
                 addrs.forEach(
@@ -153,7 +153,7 @@
         function (addrs) {
           addrs.forEach(
             (addr) => 
-            $("#attestees ul").append(
+            $("#attestees > ul").append(
               li({"id":"attestee"+addr},[addr,ul()])));return addrs}).then(
                 (addrs) => 
                 addrs.forEach(
